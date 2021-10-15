@@ -3,15 +3,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pages = ["calendar", "task", "timelog", "chart"]
 module.exports = {
 
-    mode: 'development',
+    mode: 'production',
     devtool: 'source-map',
-
-
 
     entry: pages.reduce((config, page) => {
         config[page] = `./src/${page}/${page}.jsx`;
         return config;
-        console.log(config);
     }, {}),
 
     resolve: {
