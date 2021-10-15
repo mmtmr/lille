@@ -11,9 +11,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "build-react": "webpack",
-    "start": "webpack serve --mode development",
-    "heroku-postbuild": "npm install --force && npm run build"
+    "build-react": "webpack --mode production",
+    "start": "node app.js",
+    "heroku-postbuild": "npm i && npm run build"
   },
   "author": "Maxine",
   "license": "MIT",
