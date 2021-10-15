@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
+    "build": "webpack --mode production",
     "build-react": "webpack",
     "start": "webpack serve --mode development",
     "heroku-postbuild": "npm install --force && npm run build"
@@ -84,7 +84,7 @@
     "style-loader": "^3.3.0",
     "url-loader": "^4.1.1",
     "webpack": "^5.56.0",
-    "webpack-cli": "^4.8.0",
+    "webpack-cli": "^4.9.0",
     "webpack-dev-server": "^4.3.0"
   }
 }
