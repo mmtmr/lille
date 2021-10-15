@@ -7,6 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const pool = require("./db");
 
+app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(__dirname + '/dist'));
 }
@@ -151,6 +152,7 @@ async function updateCETitle() {
 app.post('/api/task', async (req, res) => {
 
     try {
+        console.log(req.body);
         const { tsk_name, tsk_est_min } = req.body;
         const newTask = await pool.query(
             "INSERT INTO task_t (tsk_name,tsk_est_min) VALUES ($1,$2)", [tsk_name, tsk_est_min]
