@@ -13,6 +13,7 @@
     "build": "webpack --mode production",
     "build-react": "webpack --mode production",
     "start": "node app.js",
+    "heroku-prebuild": "npm install --dev",
     "heroku-postbuild": "npm i && npm run build"
   },
   "author": "Maxine",
