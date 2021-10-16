@@ -212,7 +212,7 @@ export const TaskList = () => {
                     onClose={() => { setCreateSubTask(null); }}
                     onSave={(st_name) => {
                         try {
-                            const tsk_id = editSubTask.tsk_id;
+                            const tsk_id = createSubTask.tsk_id;
                             const body = { st_name };
                             const response = fetch(`/api/task/${tsk_id}`, {
                                 method: "POST",
