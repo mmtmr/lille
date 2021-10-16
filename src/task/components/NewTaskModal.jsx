@@ -8,10 +8,9 @@ import 'bootswatch/dist/vapor/bootstrap.min.css'
 
 export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
     const [name, setName] = useState(taskInfo.tsk_name);
-    const [hour, setHour] = useState(taskInfo.tsk_est_min / 60?Math.trunc(taskInfo.tsk_est_min / 60):null);
-    const [min, setMin] = useState(taskInfo.tsk_est_min % 60);
+    const [hour, setHour] = useState(taskInfo.tsk_est_min?Math.trunc(taskInfo.tsk_est_min / 60):0);
+    const [min, setMin] = useState(taskInfo.tsk_est_min?taskInfo.tsk_est_min % 60:0);
     const [error, setError] = useState(false);
-    console.log(typeof hour, typeof min);
     return (
         <>
             <Modal
@@ -78,11 +77,8 @@ export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
                     <Button
                         variant="primary"
                         onClick={() => {
-                            if (name && (hour || min)) {
-                                hour ? setHour(hour) : setHour(0);
-                                min ? setMin(min) : setMin(0);
+                            if (name && hour && min) {
                                 setError(false);
-                                console.log(typeof parseInt(hour) * 60, typeof parseInt(min));
                                 onSave(name, parseInt(hour) * 60 + parseInt(min));
                             } else {
                                 setError(true);
