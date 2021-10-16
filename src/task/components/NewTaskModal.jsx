@@ -77,7 +77,7 @@ export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
                     <Button
                         variant="primary"
                         onClick={() => {
-                            if (name && hour && min) {
+                            if (name) {
                                 setError(false);
                                 console.log(name && hour && min);
                                 console.log(name, hour, min);
