@@ -12,9 +12,9 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(__dirname + '/dist'));
 }
 
-app.get('/', (req, res) => {
-    res.send("Hello World");
-});
+// app.get('/', (req, res) => {
+//     res.send("Hello World");
+// });
 
 
 app.get('/calendar', (req, res) => {
