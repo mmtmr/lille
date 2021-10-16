@@ -460,9 +460,12 @@ app.delete('/api/timelog/:tl_id', async (req, res) => {
     }
 });
 
+app.get("*",(req,res)=>{
+    res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
+});
 
-app.route('/*')
-    .get(function (req, res) {
-        res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
-    });
+// app.route('/*')
+//     .get(function (req, res) {
+//         res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
+//     });
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`));
