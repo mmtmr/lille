@@ -124,8 +124,7 @@ export const TimeLogList = () => {
                     timeLogInfo={null}
                     onSave={(tsk_id, tl_date, tl_standby_min, tl_real_min, st_ids) => {
                         try {
-                            const tl_created = new Date();
-                            const body = { tl_date, tl_standby_min, tl_real_min, tl_created, tsk_id, st_ids };
+                            const body = { tl_date, tl_standby_min, tl_real_min, tsk_id, st_ids };
                             const response = fetch("/api/timelog", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },

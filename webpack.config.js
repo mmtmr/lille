@@ -3,7 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const pages = ["calendar", "task", "timelog", "chart"]
 module.exports = {
 
-    mode: 'production',
+    mode: 'development',
     devtool: 'source-map',
 
     entry: pages.reduce((config, page) => {
@@ -64,6 +64,7 @@ module.exports = {
     },
 
 devServer: {
+    static: './dist',
     proxy: {
         "/api": {
             target: "http://localhost:5000",

@@ -5,7 +5,6 @@ import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Select from 'react-select'
 import 'bootswatch/dist/vapor/bootstrap.min.css';
-import axios from 'axios';
 
 
 const OptionTheme = (theme) => ({
@@ -27,7 +26,7 @@ export const NewTimeLogModal = ({ task, timeLogInfo, onSave, onClose }) => {
     //const timeLogInfo = { task:{tsk_name:"Elaine's Website"},tsk_id:"1", st_id:["1","2"]};
     //const timeLogInfo={tsk_name:["Shower"]};
     const [taskID, setTaskID] = useState(timeLogInfo === null ? 0 : timeLogInfo.tsk_id);
-    const [subtaskOpt, setSubtaskOpt] = useState([{ value: '', label: 'Select subtask here' }]);
+    const [subtaskOpt, setSubtaskOpt] = useState([{ value: "N/A", label: "N/A" }]);
     const [selectedSubtaskID, setSelectedSubtaskID] = useState(timeLogInfo === null ? [] : timeLogInfo.st_ids);
     const [standbyHour, setStandbyHour] = useState(timeLogInfo === null ? 0 : Math.trunc(timeLogInfo.tl_standby_min / 60));
     const [standbyMin, setStandbyMin] = useState(timeLogInfo === null ? 0 : timeLogInfo.tl_standby_min % 60);
@@ -42,16 +41,16 @@ export const NewTimeLogModal = ({ task, timeLogInfo, onSave, onClose }) => {
 
 
 
-    //const subtaskOpt = [{ value: '', label: 'Select subtask here' }]
     useEffect(() => {
         try {
             const tsk = task.find(tsk => { return tsk.tsk_id === taskID });
 
+            var subtaskOptions=[];
             tsk.subtask.map((st) => {
                 subtaskOptions.push({ value: st.st_id, label: st.st_name })
             })
             setSubtaskOpt(subtaskOptions);
-
+            console.log("hi");
         } catch (err) {
             console.log(err.message);
         }

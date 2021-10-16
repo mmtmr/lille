@@ -13,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.get('/', (req, res) => {
-    res.sendStatus("Hello World");
+    res.send("Hello World");
 });
 
 
@@ -208,7 +208,7 @@ app.get('/api/task', async (req, res) => {
         //     return countTask.rows[0];
         // })
 
-        
+
 
         const allFullTasks = await addSubtaskToTask(allTasks_val, allSubtasks_val);
         res.json(allFullTasks)
@@ -334,8 +334,7 @@ app.post('/api/timelog', async (req, res) => {
             )
         }
         const newTimeLogSubtask = await st_ids.map(st_id => addSubtaskToTimeLog(tl_id, st_id));
-        res.sendStatus(200);
-
+        res.send('/timelog.html');
     } catch (err) {
         console.error(err.message);
         res.sendStatus(500);
@@ -441,7 +440,7 @@ app.put('/api/timelog/:tl_id', async (req, res) => {
             )
         }
         const newTimeLogSubtask = await st_ids.map(st_id => addSubtaskToTimeLog(tl_id, st_id));
-        res.sendStatus(200);
+        res.send('/timelog.html');
     } catch (err) {
         console.log(err.message);
         res.sendStatus(500);
@@ -455,7 +454,6 @@ app.delete('/api/timelog/:tl_id', async (req, res) => {
 
         const deleteTimeLog = await pool.query(
             "DELETE FROM time_log_t WHERE tl_id=$1;", [tl_id]);
-        res.sendStatus(200);
     } catch (err) {
         console.log(err.message);
         res.sendStatus(500);

@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Form from 'react-bootstrap/Form'
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import Collapse from 'react-bootstrap/Collapse'
-
+import axios from 'axios';
 import { NewTaskModal } from './NewTaskModal';
 import { NewSubTaskModal } from './NewSubTaskModal';
 import { DeleteConfirmationModal } from '../../other/DeleteConfirmationModal';
@@ -20,18 +19,30 @@ import { faTasks, faEye } from "@fortawesome/free-solid-svg-icons";
 
 
 export const TaskList = () => {
-    const [createTask, setCreateTask] = useState(false);
-    const [createSubTask, setCreateSubTask] = useState(false);
-    const [editTask, setEditTask] = useState(false);
-    const [editSubTask, setEditSubTask] = useState(false);
+    const [createTask, setCreateTask] = useState();
+    const [createSubTask, setCreateSubTask] = useState();
+    const [editTask, setEditTask] = useState();
+    const [editSubTask, setEditSubTask] = useState();
     const [deleteTask, setDeleteTask] = useState();
     const [deleteSubTask, setDeleteSubTask] = useState();
-    const [taskInfo, setTaskInfo] = useState({ tsk_id: "", tsk_name: "", tsk_est_min: 0 });
-    const [subTaskInfo, setSubTaskInfo] = useState({ tsk_id: "", st_id: "", st_name: "" });
+    const [task, setTask] = useState([]);
+
     const [toggle, setToggle] = useState();
     //const data = [{ tsk_id: "001", tsk_name: "Shower", tsk_est_min: "20", last5average: "10", improvement: "5%", subtask: [{ st_id: "0001", st_name: "Exfoliate", occurance: "60%" }, { st_id: "0002", st_name: "Wash Hair", occurance: "40%" }] }, { tsk_id: "0002", tsk_name: "Night Routine", tsk_est_min: "15", last5average: "10", improvement: "7%", subtask: [{ st_id: "0003", tsk_name: "Brush Teeth", occurance: "100%" }, { st_id: "0004", tsk_name: "Skin Care", occurance: "100%" }] }];
 
-    const task = useFetch("/api/task");
+    useEffect(() => {
+        const getTimeLog = async () => {
+            try {
+                const response = await axios.get(`/api/task`);
+                const data = await response?.data;
+                setTask(data);
+
+            } catch (err) {
+                console.log(err.message);
+            }
+        };
+        getTimeLog();
+    }, [, createTask, createSubTask, editTask, editSubTask, deleteTask, deleteSubTask]);
     return (
         <>
         <Container className="full-height">
@@ -88,8 +99,8 @@ export const TaskList = () => {
                                     {/* <td class="text-center">{tsk.last5average}</td>
                                     <td class="text-center">{tsk.improvement}</td> */}
                                     <td class="text-center">
-                                        <Button variant="success" onClick={() => { setCreateSubTask(true); setSubTaskInfo({ tsk_id: tsk.tsk_id, tsk_name: "" }) }}>Add</Button>
-                                        <Button variant="primary" onClick={() => { setEditTask(true); setTaskInfo({ tsk_id: tsk.tsk_id, tsk_name: tsk.tsk_name, tsk_est_min: tsk.tsk_est_min }) }}>Modify</Button>
+                                        <Button variant="success" onClick={() => { setCreateSubTask({ tsk_id: tsk.tsk_id, tsk_name: "" }) }}>Add</Button>
+                                        <Button variant="primary" onClick={() => { setEditTask({ tsk_id: tsk.tsk_id, tsk_name: tsk.tsk_name, tsk_est_min: tsk.tsk_est_min }) }}>Modify</Button>
                                         <Button variant="danger" onClick={()=>setDeleteTask(tsk)}>Delete</Button>
                                     </td>
 
@@ -139,7 +150,7 @@ export const TaskList = () => {
             {
                 createTask &&
                 < NewTaskModal
-                    onClose={() => { setCreateTask(false); setTaskInfo({ tsk_id: "", tsk_name: "", tsk_est_min: 0 }); }}
+                    onClose={() => { setCreateTask(null);}}
                     onSave={(tsk_name, tsk_est_min) => {
                         try {
                             const body = { tsk_name, tsk_est_min };
@@ -148,35 +159,33 @@ export const TaskList = () => {
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify(body)
                             });
-                            setCreateTask(false);
-                            setTaskInfo({ tsk_id: "", tsk_name: "", tsk_est_min: 0 });
+                            setCreateTask(null);
                         } catch (err) {
                             console.log(err.message);
                         }
                     }}
-                    taskInfo={taskInfo}
+                    taskInfo={createTask}
                 />
             }
             {
                 editTask &&
                 < NewTaskModal
-                    onClose={() => { setEditTask(false); setTaskInfo({ tsk_id: "", tsk_name: "", tsk_est_min: 0 }); }}
+                    onClose={() => { setEditTask(null);}}
                     onSave={(tsk_name, tsk_est_min) => {
                         try {
-                            const tsk_id=taskInfo.tsk_id;
+                            const tsk_id=editTask.tsk_id;
                             const body = { tsk_name, tsk_est_min };
                             const response = fetch(`/api/task/${tsk_id}`, {
                                 method: "PUT",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify(body)
                             });
-                            setEditTask(false);
-                            setTaskInfo({ tsk_id: "", tsk_name: "", tsk_est_min: 0 });
+                            setEditTask(null);
                         } catch (err) {
                             console.log(err.message);
                         }
                     }}
-                    taskInfo={taskInfo}
+                    taskInfo={editTask}
                 />
 
             }
@@ -200,42 +209,40 @@ export const TaskList = () => {
             {
                 createSubTask &&
                 < NewSubTaskModal
-                    onClose={() => { setCreateSubTask(false); setSubTaskInfo({ tsk_id: "", st_id: "", st_name: "" }); }}
+                    onClose={() => { setCreateSubTask(null); }}
                     onSave={(st_name) => {
                         try {
-                            const tsk_id = subTaskInfo.tsk_id;
+                            const tsk_id = editSubTask.tsk_id;
                             const body = { st_name };
                             const response = fetch(`/api/task/${tsk_id}`, {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify(body)
                             });
-                            setCreateSubTask(false);
-                            setSubTaskInfo({ tsk_id: "", st_id: "", st_name: "" });
+                            setCreateSubTask(null);
                         } catch (err) {
                             console.log(err.message);
                         }
                     }}
-                    subTaskInfo={subTaskInfo}
+                    subTaskInfo={editSubTask}
                 />
             }
             {
                 editSubTask &&
                 < NewSubTaskModal
-                    onClose={() => { setEditSubTask(false); setSubTaskInfo({ tsk_id: "", st_id: "", st_name: "" }); }}
+                    onClose={() => { setEditSubTask(null);}}
                     onSave={(st_name) => {
-                        const tsk_id=subTaskInfo.tsk_id;
-                        const st_id=subTaskInfo.st_id;
+                        const tsk_id=editSubTask.tsk_id;
+                        const st_id=editSubTask.st_id;
                         const body = { st_name };
                         const response = fetch(`/api/task/${tsk_id}/${st_id}`, {
                             method: "PUT",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify(body)
                         });
-                        setSubTaskInfo({ tsk_id: "", st_id: "", st_name: "" });
-                        setEditSubTask(false);
+                        setEditSubTask(null);
                     }}
-                    subTaskInfo={subTaskInfo}
+                    subTaskInfo={editSubTask}
                 />
             }
             {

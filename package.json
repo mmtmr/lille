@@ -12,6 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
     "build-react": "webpack --config webpack.config.js",
+    "dev": "webpack serve --open",
     "start": "node app.js",
     "heroku-prebuild": "npm install --dev",
     "heroku-postbuild": "npm i && npm run build"
