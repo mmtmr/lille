@@ -224,7 +224,7 @@ export const TaskList = () => {
                             console.log(err.message);
                         }
                     }}
-                    subTaskInfo={editSubTask}
+                    subTaskInfo={createSubTask}
                 />
             }
             {

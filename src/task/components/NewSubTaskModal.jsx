@@ -7,7 +7,7 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import 'bootswatch/dist/vapor/bootstrap.min.css'
 
 export const NewSubTaskModal = ({ onSave, onClose, subTaskInfo }) => {
-    const [name, setName] = useState(subTaskInfo?subTaskInfo.st_name:"");
+    const [name, setName] = useState(subTaskInfo.st_name);
     const [error, setError] = useState(false);
 
     return (
