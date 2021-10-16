@@ -79,6 +79,8 @@ export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
                         onClick={() => {
                             if (name && hour && min) {
                                 setError(false);
+                                console.log(name && hour && min);
+                                console.log(name, hour, min);
                                 onSave(name, parseInt(hour) * 60 + parseInt(min));
                             } else {
                                 setError(true);
