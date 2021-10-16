@@ -8,7 +8,7 @@ import 'bootswatch/dist/vapor/bootstrap.min.css'
 
 export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
     const [name, setName] = useState(taskInfo.tsk_name);
-    const [hour, setHour] = useState(taskInfo.tsk_est_min / 60?Math.trunc(taskInfo.tsk_est_min / 60):0);
+    const [hour, setHour] = useState(taskInfo.tsk_est_min / 60?Math.trunc(taskInfo.tsk_est_min / 60):"");
     const [min, setMin] = useState(taskInfo.tsk_est_min % 60);
     const [error, setError] = useState(false);
     console.log(typeof hour, typeof min);
