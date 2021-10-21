@@ -1,26 +1,29 @@
 import React from 'react';
-import {colourSchemePinkBlue} from './ColourScheme';
+import { colourSchemePinkBlue } from './ColourScheme';
 import { Bar } from 'react-chartjs-2';
 
 export const BarChartGraph = ({ selectedTimeLog, selectedTask, selectedType }) => {
     var datasets = [];
-    
+
     var datas = selectedTask.map((tsk) => { return { tsk_id: tsk.tsk_id, tl_standby_mins: [], tl_real_mins: [] } });
-    var options={};
-    const sortedTimeLog=selectedTimeLog.sort((a,b)=>{return new Date(a.tl_date).getTime()-new Date(b.tl_date).getTime()});
-    const sortedDate=sortedTimeLog.map((tl)=>{return new Date(new Date(tl.tl_date).getTime() - (new Date(tl.tl_date).getTimezoneOffset() * 60000)).toISOString().split('T')[0]});
+    var options = {};
+    const sortedTimeLog = selectedTimeLog.sort((a, b) => { return new Date(a.tl_date).getTime() - new Date(b.tl_date).getTime() });
+    const sortedDate = sortedTimeLog.map((tl) => { return new Date(new Date(tl.tl_date).getTime() - (new Date(tl.tl_date).getTimezoneOffset() * 60000)).toISOString().split('T')[0] });
     const labels = [...new Set(sortedDate)];
-    for (var tl of sortedTimeLog) {
-        for (var data of datas) {
+    var prevDate;
+    for (var data of datas) {
+        prevDate = new Date(new Date(sortedTimeLog[0].tl_date).getTime()-86400000);
+        for (var tl of sortedTimeLog) {
             if (data.tsk_id === tl.tsk_id) {
                 data.tl_standby_mins.push(tl.tl_standby_min);
                 data.tl_real_mins.push(tl.tl_real_min);
-                
-            }else{
+                prevDate = new Date(tl.tl_date);
+            } else if (new Date(tl.tl_date).getTime() - prevDate.getTime() > 86400000) {
+                console.log(data.tsk_id,new Date(tl.tl_date),prevDate);
+                prevDate = new Date(tl.tl_date);
                 data.tl_standby_mins.push(0);
                 data.tl_real_mins.push(0);
             }
-            console.log(data);
         }
     }
 
@@ -41,12 +44,12 @@ export const BarChartGraph = ({ selectedTimeLog, selectedTask, selectedType }) =
                 })
             };
             options = {
-                plugins:{
+                plugins: {
                     title: {
                         display: true,
                         text: 'Task Time Log Total Minutes'
                     },
-                },                
+                },
                 scales: {
                     x: {
                         stacked: true,
@@ -66,12 +69,12 @@ export const BarChartGraph = ({ selectedTimeLog, selectedTask, selectedType }) =
                 })
             };
             options = {
-                plugins:{
+                plugins: {
                     title: {
                         display: true,
                         text: 'Task Time Log Waiting Minutes'
                     },
-                },  
+                },
             };
             break;
         case "executing":
@@ -83,16 +86,17 @@ export const BarChartGraph = ({ selectedTimeLog, selectedTask, selectedType }) =
                 })
             };
             options = {
-                plugins:{
+                plugins: {
                     title: {
                         display: true,
                         text: 'Task Time Log Executing Minutes'
                     },
-                },  
+                },
             };
             break;
     }
 
+    console.log(datasets);
 
     return (
         <Bar data={{ labels: labels, datasets: datasets }} options={options} />
