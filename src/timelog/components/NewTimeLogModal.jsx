@@ -45,7 +45,7 @@ export const NewTimeLogModal = ({ task, timeLogInfo, onSave, onClose }) => {
         try {
             const tsk = task.find(tsk => { return tsk.tsk_id === taskID });
 
-            var subtaskOptions=[];
+            var subtaskOptions = [];
             tsk.subtask.map((st) => {
                 subtaskOptions.push({ value: st.st_id, label: st.st_name })
             })
@@ -188,7 +188,7 @@ export const NewTimeLogModal = ({ task, timeLogInfo, onSave, onClose }) => {
                                 realHour ? setRealHour(realHour) : setRealHour(0);
                                 realMin ? setRealMin(realMin) : setRealMin(0);
                                 setError(false);
-                                onSave(taskID, date, parseInt(standbyHour) * 60 + parseInt(standbyMin), parseInt(realHour) * 60 + parseInt(realMin), selectedSubtaskID);
+                                onSave(taskID, date, Number(parseInt(standbyHour) * 60) + parseInt(standbyMin), Number(parseInt(realHour) * 60) + parseInt(realMin), selectedSubtaskID);
                             } else {
                                 setError(true);
                             }
