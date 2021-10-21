@@ -37,8 +37,8 @@ export const LineChartForm = ({ task, onSubmit }) => {
     const [endDate, setEndDate] = useState(new Date(new Date().getTime() - (new Date().getTimezoneOffset() * 60000)).toISOString().split('T')[0]);
     const [error, setError] = useState();
 
-    const handleTypeChange = (selected) => { setSelectedType(selected.value); setSelectedSubtaskID([]); };
-    const handleTaskChange = (selected) => { setSelectedTaskID(selected.value); };
+    const handleTypeChange = (selected) => { setSelectedType(selected.value); };
+    const handleTaskChange = (selected) => { setSelectedTaskID(selected.value); setSelectedSubtaskID([]);};
 
     const handleSubtaskChange = (selected) => { setSelectedSubtaskID(selected.map(t => Object.values(t)[0])); };
 
@@ -108,6 +108,7 @@ export const LineChartForm = ({ task, onSubmit }) => {
                 <Form.Group>
                     <Form.Label>Task(s)</Form.Label>
                     <Select
+                        value={selectedSubtaskID.map((ssid) => { return subtaskOpt.find(so => { return so.value === parseInt(ssid) }); })}
                         options={subtaskOpt}
                         isMulti
                         theme={OptionTheme}

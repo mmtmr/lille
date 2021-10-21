@@ -66,8 +66,8 @@ export const ChartPanel = () => {
 
             var filterSubtask = lineChart.st_ids.map((st_id) => { return filterTask.subtask.find(st => { return st.st_id === parseInt(st_id) }); }).filter(st => { return st !== undefined })
 
-            var filterTimeLog = lineChart.st_ids.map((st_id) => { return log.filter(lg => { return lg.subtask.find(st => { return st.st_id === parseInt(st_id) }); }) }).flat().filter(tl => { return tl !== undefined })
-
+            //var filterTimeLog = lineChart.st_ids.map((st_id) => { return log.filter(lg => { return lg.subtask.find(st => { return st.st_id === parseInt(st_id) }); }) }).flat().filter(tl => { return tl !== undefined }).filter((v,i,a)=>a.findIndex(t=>(t.st_id === v.st_id))===i)
+            var filterTimeLog=log.filter(lg=>{return lg.subtask.some(st=> lineChart.st_ids.includes(st.st_id))}).flat().filter(tl => { return tl !== undefined });
 
             if (lineChart.st_ids.includes(0)) {
                 filterSubtask.push({ st_id: 0, st_name: "None" });
