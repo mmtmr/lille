@@ -182,13 +182,13 @@ export const NewTimeLogModal = ({ task, timeLogInfo, onSave, onClose }) => {
                     <Button
                         variant="primary"
                         onClick={() => {
-                            if (taskID && date && (realHour || realMin)) {
+                            if (taskID && date) {
                                 standbyHour ? setStandbyHour(standbyHour) : setStandbyHour(0);
                                 standbyMin ? setStandbyMin(standbyMin) : setStandbyMin(0);
                                 realHour ? setRealHour(realHour) : setRealHour(0);
                                 realMin ? setRealMin(realMin) : setRealMin(0);
                                 setError(false);
-                                onSave(taskID, date, standbyHour * 60 + standbyMin, realHour * 60 + realMin, selectedSubtaskID);
+                                onSave(taskID, date, parseInt(standbyHour) * 60 + parseInt(standbyMin), parseInt(realHour) * 60 + parseInt(realMin), selectedSubtaskID);
                             } else {
                                 setError(true);
                             }
