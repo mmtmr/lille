@@ -14,7 +14,6 @@ export const BarChartGraph = ({ selectedTimeLog, selectedTask, selectedType }) =
     for (var data of datas) {
         var i=0;
         if (sortedDate[tl]!==labels[i]) {
-            console.log("Put zero", data.tsk_id, sortedDate[tl], labels[i]);
             data.tl_standby_mins.push(0);
             data.tl_real_mins.push(0);
             i++;
