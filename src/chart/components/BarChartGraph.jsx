@@ -5,25 +5,30 @@ import { Bar } from 'react-chartjs-2';
 export const BarChartGraph = ({ selectedTimeLog, selectedTask, selectedType }) => {
     var datasets = [];
 
-    var datas = selectedTask.map((tsk) => { return { tsk_id: tsk.tsk_id, tl_standby_mins: [], tl_real_mins: [] } });
+    var datas = selectedTask.sort((a, b) => { return parseInt(a.tsk_id) - parseInt(b.tsk_id) }).map((tsk) => { return { tsk_id: tsk.tsk_id, tl_standby_mins: [], tl_real_mins: [] } });
     var options = {};
-    const sortedTimeLog = selectedTimeLog.sort((a, b) => { return new Date(a.tl_date).getTime() - new Date(b.tl_date).getTime() });
+    const sortedTimeLog = selectedTimeLog.sort((a, b) => { return new Date(a.tl_date).getTime() - new Date(b.tl_date).getTime() }).sort((a, b) => { return parseInt(a.tsk_id) - parseInt(b.tsk_id) });
     const sortedDate = sortedTimeLog.map((tl) => { return new Date(new Date(tl.tl_date).getTime() - (new Date(tl.tl_date).getTimezoneOffset() * 60000)).toISOString().split('T')[0] });
     const labels = [...new Set(sortedDate)];
-    var prevDate;
+    var tl = 0;
     for (var data of datas) {
-        prevDate = new Date(new Date(sortedTimeLog[0].tl_date).getTime()-86400000);
-        for (var tl of sortedTimeLog) {
-            if (data.tsk_id === tl.tsk_id) {
-                data.tl_standby_mins.push(tl.tl_standby_min);
-                data.tl_real_mins.push(tl.tl_real_min);
-                prevDate = new Date(tl.tl_date);
-            } else if (new Date(tl.tl_date).getTime() - prevDate.getTime() >= 86400000) {
-                console.log(data.tsk_id,new Date(tl.tl_date),prevDate);
+        var i=0;
+        if (sortedDate[tl]!==labels[i]) {
+            console.log("Put zero", data.tsk_id, sortedDate[tl], labels[i]);
+            data.tl_standby_mins.push(0);
+            data.tl_real_mins.push(0);
+            i++;
+        }
+        for (; tl < sortedTimeLog.length; tl++,i++) {
+            if (data.tsk_id !== sortedTimeLog[tl].tsk_id) {
+                break;
+            } else if (sortedDate[tl]!==labels[i]) {
                 data.tl_standby_mins.push(0);
                 data.tl_real_mins.push(0);
-                prevDate = new Date(tl.tl_date);
-
+                tl--;
+            } else {
+                data.tl_standby_mins.push(sortedTimeLog[tl].tl_standby_min);
+                data.tl_real_mins.push(sortedTimeLog[tl].tl_real_min);
             }
         }
     }
