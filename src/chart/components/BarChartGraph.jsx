@@ -18,11 +18,12 @@ export const BarChartGraph = ({ selectedTimeLog, selectedTask, selectedType }) =
                 data.tl_standby_mins.push(tl.tl_standby_min);
                 data.tl_real_mins.push(tl.tl_real_min);
                 prevDate = new Date(tl.tl_date);
-            } else if (new Date(tl.tl_date).getTime() - prevDate.getTime() > 86400000) {
+            } else if (new Date(tl.tl_date).getTime() - prevDate.getTime() >= 86400000) {
                 console.log(data.tsk_id,new Date(tl.tl_date),prevDate);
-                prevDate = new Date(tl.tl_date);
                 data.tl_standby_mins.push(0);
                 data.tl_real_mins.push(0);
+                prevDate = new Date(tl.tl_date);
+
             }
         }
     }
