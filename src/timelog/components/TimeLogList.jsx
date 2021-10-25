@@ -6,8 +6,8 @@ import axios from 'axios';
 import { DeleteConfirmationModal } from '../../other/DeleteConfirmationModal';
 import { NewTimeLogModal } from './NewTimeLogModal'
 import { useFetch } from './hooks/useFetch';
-import '../timelog.css'
 import 'bootswatch/dist/vapor/bootstrap.css'
+import '../timelog.css'
 
 import { Fab, Action } from 'react-tiny-fab';
 import 'react-tiny-fab/dist/styles.css';

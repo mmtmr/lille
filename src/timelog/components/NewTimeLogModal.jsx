@@ -4,8 +4,6 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Select from 'react-select'
-import 'bootswatch/dist/vapor/bootstrap.min.css';
-
 
 const OptionTheme = (theme) => ({
     ...theme,

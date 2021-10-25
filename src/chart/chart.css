@@ -1,7 +1,7 @@
-.full-height{
-	height: 100vh;
+body{
+	background-attachment: fixed;
 }
 
-.body{
-	background-attachment: fixed;
+.full-height{
+	height: 100vh;
 }
