@@ -7,7 +7,7 @@ import { NewTaskModal } from './NewTaskModal';
 import { NewSubTaskModal } from './NewSubTaskModal';
 import { DeleteConfirmationModal } from '../../other/DeleteConfirmationModal';
 
-import 'bootswatch/dist/vapor/bootstrap.min.css'
+import 'bootswatch/dist/vapor/bootstrap.css'
 import { useFetch } from './hooks/useFetch';
 
 import '../task.css'

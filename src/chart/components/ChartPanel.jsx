@@ -6,7 +6,7 @@ import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
 import { useFetch } from './hooks/useFetch';
 
-import 'bootswatch/dist/vapor/bootstrap.min.css'
+import 'bootswatch/dist/vapor/bootstrap.css'
 import '../chart.css';
 
 import { BarChartForm } from './BarChartForm';

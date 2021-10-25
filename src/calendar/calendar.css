@@ -40,3 +40,7 @@ body > div { /* the react root */
 .tooltip:hover .tooltiptext {
   visibility: visible;
 }
+
+.body{
+  background-attachment: fixed;
+}

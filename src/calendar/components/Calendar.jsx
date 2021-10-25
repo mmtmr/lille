@@ -11,7 +11,7 @@ import googleCalendarPlugin from '@fullcalendar/google-calendar'
 import iCalendarPlugin from '@fullcalendar/icalendar'
 import axios from 'axios'
 import "@fortawesome/fontawesome-free/css/all.css"
-import "bootswatch/dist/vapor/bootstrap.min.css"
+import "bootswatch/dist/vapor/bootstrap.css"
 import { Tooltip } from "bootstrap/dist/js/bootstrap.esm.min.js"
 
 export default class Calendar extends React.Component {
