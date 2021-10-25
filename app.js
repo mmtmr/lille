@@ -152,10 +152,9 @@ async function updateCETitle() {
 app.post('/api/task', async (req, res) => {
 
     try {
-        console.log(req.body);
-        const { tsk_name, tsk_est_min } = req.body;
+        const { tsk_name, tsk_est_min, tsk_todo } = req.body;
         const newTask = await pool.query(
-            "INSERT INTO task_t (tsk_name,tsk_est_min) VALUES ($1,$2)", [tsk_name, tsk_est_min]
+            "INSERT INTO task_t (tsk_name,tsk_est_min,tsk_todo) VALUES ($1,$2,$3)", [tsk_name, tsk_est_min, tsk_todo]
         );
     } catch (err) {
         console.error(err.message);
@@ -169,7 +168,7 @@ app.post('/api/task/:tsk_id', async (req, res) => {
         const { tsk_id } = req.params;
         const { st_name } = req.body;
         const newTask = await pool.query(
-            "INSERT INTO subtask_t (st_name,tsk_id) VALUES ($1,$2)", [st_name, tsk_id]
+            "INSERT INTO subtask_t (st_name,tsk_id) VALUES ($1,$2,$3)", [st_name, tsk_id]
         );
     } catch (err) {
         console.error(err.message);
@@ -270,9 +269,10 @@ app.get('/api/task/:tsk_id/:st_id', async (req, res) => {
 //Update a task
 app.put('/api/task/:tsk_id', async (req, res) => {
     try {
+        
         const { tsk_id } = req.params;
-        const { tsk_name, tsk_est_min } = req.body;
-        const updateTask = await pool.query("UPDATE task_t SET tsk_name=$1,tsk_est_min=$2 WHERE tsk_id=$3;", [tsk_name, tsk_est_min, tsk_id]);
+        const { tsk_name, tsk_est_min, tsk_todo } = req.body;
+        const updateTask = await pool.query("UPDATE task_t SET tsk_name=$1,tsk_est_min=$2,tsk_todo=$3 WHERE tsk_id=$4;", [tsk_name, tsk_est_min, tsk_todo, tsk_id]);
         res.sendStatus(200);
     } catch (err) {
         console.log(err.message);

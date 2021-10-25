@@ -3,13 +3,14 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import InputGroup from 'react-bootstrap/InputGroup'
-
-import 'bootswatch/dist/vapor/bootstrap.min.css'
+import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 
 export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
     const [name, setName] = useState(taskInfo.tsk_name);
-    const [hour, setHour] = useState(taskInfo.tsk_est_min?Math.trunc(taskInfo.tsk_est_min / 60):0);
-    const [min, setMin] = useState(taskInfo.tsk_est_min?taskInfo.tsk_est_min % 60:0);
+    const [hour, setHour] = useState(taskInfo.tsk_est_min ? Math.trunc(taskInfo.tsk_est_min / 60) : 0);
+    const [min, setMin] = useState(taskInfo.tsk_est_min ? taskInfo.tsk_est_min % 60 : 0);
+    const [type, setType] = useState(taskInfo.tsk_todo ? "todo" : "habit");
     const [error, setError] = useState(false);
     return (
         <>
@@ -26,7 +27,7 @@ export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
                         <Form.Group className={error ? 'error' : ''}>
                             <InputGroup>
                                 <InputGroup.Text>Task Name</InputGroup.Text>
-                                
+
                                 <Form.Control
                                     type="text"
                                     placeholder="Enter here"
@@ -37,8 +38,8 @@ export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
                         </Form.Group>
                         <br />
                         <Form.Group className={error ? 'error' : ''}>
-                            <div class="row">
-                                <div class="col">
+                            <Row>
+                                <Col>
                                     <InputGroup>
                                         <InputGroup.Text>Hours</InputGroup.Text>
                                         <Form.Control
@@ -52,8 +53,8 @@ export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
                                             onChange={e => setHour(e.target.value)}
                                         />
                                     </InputGroup>
-                                </div>
-                                <div class="col">
+                                </Col>
+                                <Col>
                                     <InputGroup>
                                         <InputGroup.Text>Minutes</InputGroup.Text>
                                         <Form.Control
@@ -68,9 +69,21 @@ export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
                                             onChange={e => setMin(e.target.value)}
                                         />
                                     </InputGroup>
-                                </div>
-                            </div>
+                                </Col>
+                            </Row>
                         </Form.Group>
+                        < br />
+                        <InputGroup>
+                            <InputGroup.Text>Type</InputGroup.Text>
+                            <Form.Control
+                                value={type}
+                                as="select"
+                                onChange={e => setType(e.target.value)}
+                            >
+                                <option value="habit">Habit</option>
+                                <option value="todo">To Do</option>
+                            </Form.Control>
+                        </InputGroup>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -79,9 +92,7 @@ export const NewTaskModal = ({ onSave, onClose, taskInfo }) => {
                         onClick={() => {
                             if (name) {
                                 setError(false);
-                                console.log(name && hour && min);
-                                console.log(name, hour, min);
-                                onSave(name, parseInt(hour) * 60 + parseInt(min));
+                                onSave(name, Number(parseInt(hour) * 60) + Number(parseInt(min)), type === "todo");
                             } else {
                                 setError(true);
                             }

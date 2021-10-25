@@ -72,6 +72,7 @@ export const TaskList = () => {
                             <th>Task List</th>
                             <th class="text-center">Name</th>
                             <th class="text-center">Estimate Minutes</th>
+                            <th class="text-center">Type</th>
                             {/* <th class="text-center">Average Minutes (Last 5)</th>
                             <th class="text-center">Improvement</th> */}
                             <th></th>
@@ -96,11 +97,12 @@ export const TaskList = () => {
 
                                     <td class="text-center">{tsk.tsk_name}</td>
                                     <td class="text-center">{tsk.tsk_est_min}</td>
+                                    <td class="text-center">{tsk.tsk_todo?"To Do":"Habit"}</td>
                                     {/* <td class="text-center">{tsk.last5average}</td>
                                     <td class="text-center">{tsk.improvement}</td> */}
                                     <td class="text-center">
-                                        <Button variant="success" onClick={() => { setCreateSubTask({ tsk_id: tsk.tsk_id, tsk_name: "" }) }}>Add</Button>
-                                        <Button variant="primary" onClick={() => { setEditTask({ tsk_id: tsk.tsk_id, tsk_name: tsk.tsk_name, tsk_est_min: tsk.tsk_est_min }) }}>Modify</Button>
+                                        <Button variant="success" onClick={() => { setCreateSubTask({ tsk_id: tsk.tsk_id, tsk_name: "", tsk_todo:tsk.tsk_todo }) }}>Add</Button>
+                                        <Button variant="primary" onClick={() => { setEditTask({ tsk_id: tsk.tsk_id, tsk_name: tsk.tsk_name, tsk_est_min: tsk.tsk_est_min, tsk_todo:tsk.tsk_todo }) }}>Modify</Button>
                                         <Button variant="danger" onClick={()=>setDeleteTask(tsk)}>Delete</Button>
                                     </td>
 
@@ -151,9 +153,9 @@ export const TaskList = () => {
                 createTask &&
                 < NewTaskModal
                     onClose={() => { setCreateTask(null);}}
-                    onSave={(tsk_name, tsk_est_min) => {
+                    onSave={(tsk_name, tsk_est_min, tsk_todo) => {
                         try {
-                            const body = { tsk_name, tsk_est_min };
+                            const body = { tsk_name, tsk_est_min, tsk_todo};
                             const response = fetch("/api/task", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
@@ -171,10 +173,10 @@ export const TaskList = () => {
                 editTask &&
                 < NewTaskModal
                     onClose={() => { setEditTask(null);}}
-                    onSave={(tsk_name, tsk_est_min) => {
+                    onSave={(tsk_name, tsk_est_min, tsk_todo) => {
                         try {
                             const tsk_id=editTask.tsk_id;
-                            const body = { tsk_name, tsk_est_min };
+                            const body = { tsk_name, tsk_est_min, tsk_todo };
                             const response = fetch(`/api/task/${tsk_id}`, {
                                 method: "PUT",
                                 headers: { "Content-Type": "application/json" },
