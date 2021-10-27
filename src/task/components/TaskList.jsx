@@ -45,26 +45,29 @@ export const TaskList = () => {
     }, [, createTask, createSubTask, editTask, editSubTask, deleteTask, deleteSubTask]);
     return (
         <>
-        <Container className="full-height">
-            <Fab
-                position={{ bottom: 5, right: 5 }}
-                event="hover"
-                alwaysShowTitle={true}
-                mainButtonStyles={{
-                    backgroundColor: "#00b5ad"
-                }}
-                icon="+"
-            >
-                <Action
-                    style={{
-                        backgroundColor: "#8e44ad"
-                    }}
-                    onClick={() => setCreateTask(true)}
-                >
-                    <FontAwesomeIcon icon={faTasks} />
-                </Action>
+            <Container className="full-height">
+                {
+                    !createTask && !createSubTask && !editTask && !editSubTask && !deleteTask && !deleteSubTask &&
+                    <Fab
+                        position={{ bottom: 5, right: 5 }}
+                        event="hover"
+                        alwaysShowTitle={true}
+                        mainButtonStyles={{
+                            backgroundColor: "#00b5ad"
+                        }}
+                        icon="+"
+                    >
+                        <Action
+                            style={{
+                                backgroundColor: "#8e44ad"
+                            }}
+                            onClick={() => setCreateTask(true)}
+                        >
+                            <FontAwesomeIcon icon={faTasks} />
+                        </Action>
 
-            </Fab>
+                    </Fab>
+                }
 
                 <table class="table table-striped">
                     <thead>
@@ -97,13 +100,13 @@ export const TaskList = () => {
 
                                     <td class="text-center">{tsk.tsk_name}</td>
                                     <td class="text-center">{tsk.tsk_est_min}</td>
-                                    <td class="text-center">{tsk.tsk_todo?"To Do":"Habit"}</td>
+                                    <td class="text-center">{tsk.tsk_todo ? "To Do" : "Habit"}</td>
                                     {/* <td class="text-center">{tsk.last5average}</td>
                                     <td class="text-center">{tsk.improvement}</td> */}
                                     <td class="text-center">
-                                        <Button variant="success" onClick={() => { setCreateSubTask({ tsk_id: tsk.tsk_id, tsk_name: "", tsk_todo:tsk.tsk_todo }) }}>Add</Button>
-                                        <Button variant="primary" onClick={() => { setEditTask({ tsk_id: tsk.tsk_id, tsk_name: tsk.tsk_name, tsk_est_min: tsk.tsk_est_min, tsk_todo:tsk.tsk_todo }) }}>Modify</Button>
-                                        <Button variant="danger" onClick={()=>setDeleteTask(tsk)}>Delete</Button>
+                                        <Button variant="success" onClick={() => { setCreateSubTask({ tsk_id: tsk.tsk_id, tsk_name: "", tsk_todo: tsk.tsk_todo }) }}>Add</Button>
+                                        <Button variant="primary" onClick={() => { setEditTask({ tsk_id: tsk.tsk_id, tsk_name: tsk.tsk_name, tsk_est_min: tsk.tsk_est_min, tsk_todo: tsk.tsk_todo }) }}>Modify</Button>
+                                        <Button variant="danger" onClick={() => setDeleteTask(tsk)}>Delete</Button>
                                     </td>
 
 
@@ -129,8 +132,8 @@ export const TaskList = () => {
                                                                 <td class="text-center">{st.st_name}</td>
                                                                 {/* <td class="text-center">{st.occurance}</td> */}
                                                                 <td class="text-center">
-                                                                    <Button variant="primary" onClick={() => { setEditSubTask(true); setSubTaskInfo({ tsk_id: st.tsk_id, st_id:st.st_id, st_name: st.st_name }); }}>Modify</Button>
-                                                                    <Button variant="danger" onClick={()=>setDeleteSubTask(st)}>Delete</Button>
+                                                                    <Button variant="primary" onClick={() => { setEditSubTask(true); setSubTaskInfo({ tsk_id: st.tsk_id, st_id: st.st_id, st_name: st.st_name }); }}>Modify</Button>
+                                                                    <Button variant="danger" onClick={() => setDeleteSubTask(st)}>Delete</Button>
                                                                 </td>
                                                             </tr>
                                                         </Collapse>
@@ -152,10 +155,10 @@ export const TaskList = () => {
             {
                 createTask &&
                 < NewTaskModal
-                    onClose={() => { setCreateTask(null);}}
+                    onClose={() => { setCreateTask(null); }}
                     onSave={(tsk_name, tsk_est_min, tsk_todo) => {
                         try {
-                            const body = { tsk_name, tsk_est_min, tsk_todo};
+                            const body = { tsk_name, tsk_est_min, tsk_todo };
                             const response = fetch("/api/task", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
@@ -172,10 +175,10 @@ export const TaskList = () => {
             {
                 editTask &&
                 < NewTaskModal
-                    onClose={() => { setEditTask(null);}}
+                    onClose={() => { setEditTask(null); }}
                     onSave={(tsk_name, tsk_est_min, tsk_todo) => {
                         try {
-                            const tsk_id=editTask.tsk_id;
+                            const tsk_id = editTask.tsk_id;
                             const body = { tsk_name, tsk_est_min, tsk_todo };
                             const response = fetch(`/api/task/${tsk_id}`, {
                                 method: "PUT",
@@ -194,9 +197,9 @@ export const TaskList = () => {
             {
                 deleteTask &&
                 < DeleteConfirmationModal
-                onCancel={() => setDeleteTask(null) }
+                    onCancel={() => setDeleteTask(null)}
                     onConfirm={() => {
-                        const tsk_id=deleteTask.tsk_id;
+                        const tsk_id = deleteTask.tsk_id;
                         const body = { tsk_id };
                         const response = fetch(`/api/task/${tsk_id}`, {
                             method: "DELETE",
@@ -232,10 +235,10 @@ export const TaskList = () => {
             {
                 editSubTask &&
                 < NewSubTaskModal
-                    onClose={() => { setEditSubTask(null);}}
+                    onClose={() => { setEditSubTask(null); }}
                     onSave={(st_name) => {
-                        const tsk_id=editSubTask.tsk_id;
-                        const st_id=editSubTask.st_id;
+                        const tsk_id = editSubTask.tsk_id;
+                        const st_id = editSubTask.st_id;
                         const body = { st_name };
                         const response = fetch(`/api/task/${tsk_id}/${st_id}`, {
                             method: "PUT",
@@ -250,10 +253,10 @@ export const TaskList = () => {
             {
                 deleteSubTask &&
                 < DeleteConfirmationModal
-                    onCancel={() => setDeleteSubTask(null) }
+                    onCancel={() => setDeleteSubTask(null)}
                     onConfirm={() => {
-                        const tsk_id=deleteSubTask.tsk_id;
-                        const st_id=deleteSubTask.st_id;
+                        const tsk_id = deleteSubTask.tsk_id;
+                        const st_id = deleteSubTask.st_id;
                         const body = { st_id };
                         const response = fetch(`/api/task/${tsk_id}/${st_id}`, {
                             method: "DELETE",
@@ -265,7 +268,7 @@ export const TaskList = () => {
                     targetName={deleteSubTask.tsk_name}
                 />
             }
-            
+
 
         </>
     );

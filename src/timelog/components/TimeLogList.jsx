@@ -92,25 +92,28 @@ export const TimeLogList = () => {
     return (
         <>
             <Container className="full-height">
-                <Fab
-                    position={{ bottom: 5, right: 5 }}
-                    event="hover"
-                    alwaysShowTitle={true}
-                    mainButtonStyles={{
-                        backgroundColor: "#00b5ad"
-                    }}
-                    icon="+"
-                >
-                    <Action
-                        style={{
-                            backgroundColor: "#8e44ad"
+                {
+                    !editLog && !createLog && !deleteLog &&
+                    <Fab
+                        position={{ bottom: 5, right: 5 }}
+                        event="hover"
+                        alwaysShowTitle={true}
+                        mainButtonStyles={{
+                            backgroundColor: "#00b5ad"
                         }}
-                        onClick={() => setCreateLog(true)}
+                        icon="+"
                     >
-                        <FontAwesomeIcon icon={faClock} />
-                    </Action>
+                        <Action
+                            style={{
+                                backgroundColor: "#8e44ad"
+                            }}
+                            onClick={() => setCreateLog(true)}
+                        >
+                            <FontAwesomeIcon icon={faClock} />
+                        </Action>
 
-                </Fab>
+                    </Fab>
+                }
                 <BootstrapTable
                     keyField="tl_id"
                     data={log}
@@ -162,7 +165,7 @@ export const TimeLogList = () => {
             {
                 deleteLog &&
                 < DeleteConfirmationModal
-                onCancel={() => setDeleteLog(null) }
+                    onCancel={() => setDeleteLog(null)}
                     onConfirm={() => {
                         const body = { deleteLog };
                         const response = fetch(`/api/timelog/${deleteLog}`, {
