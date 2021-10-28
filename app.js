@@ -12,7 +12,7 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(__dirname + '/dist'));
 }
 
-app.get('/', (req, res) => {
+app.get('', (req, res) => {
     res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
 });
 
@@ -30,6 +30,10 @@ app.get('/timelog', (req, res) => {
 
 app.get('/chart', (req, res) => {
     res.sendFile(path.resolve(__dirname + '/dist', 'chart.html'));
+});
+
+app.get('/revision', (req, res) => {
+    res.sendFile(path.resolve(__dirname + '/dist', 'revision.html'));
 });
 
 

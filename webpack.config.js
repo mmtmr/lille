@@ -7,7 +7,7 @@ module.exports = {
     devtool: 'source-map',
 
     entry: pages.reduce((config, page) => {
-        config[page] = `./src/${page}/${page}.jsx`;
+        config[page] = `./src/${page}.jsx`;
         return config;
     }, {}),
 
@@ -51,9 +51,9 @@ module.exports = {
                 new HtmlWebpackPlugin({
                     title: 'Lille',
                     inject: true,
-                    template: 'src/index.html',
+                    template: 'public/index.html',
                     filename: `${page}.html`,
-                    favicon: 'src/favicon.ico',
+                    favicon: 'public/favicon.ico',
                     chunks: [page]
                 }),
         ),
