@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container'
 import Button from 'react-bootstrap/Button'
 import BootstrapTable from 'react-bootstrap-table-next';
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
+import Alert from 'react-bootstrap/Alert'
+
 import { DeleteConfirmationModal } from '../common/DeleteConfirmationModal';
 import { NewRevisionModal } from './NewRevisionModal'
 import 'bootswatch/dist/vapor/bootstrap.css'
@@ -18,30 +22,35 @@ export const RevisionList = () => {
     const [createRevision, setCreateRevision] = useState();
     const [editRevision, setEditRevision] = useState();
     const [deleteRevision, setDeleteRevision] = useState();
-    const [updateRevision, setUpdateRevision] = useState([]);
+    const [updateRevision, setUpdateRevision] = useState();
     const [revision, setRevision] = useState([]);
+    const [dueRevision, setDueRevision] = useState([]);
     const [notes, setNotes] = useState([]);
 
     useEffect(() => {
         try {
             const getCards = async () => {
-                const findCards = await ankiInvoke("findCards", 6, { query: "deck:Lille" });
-                if (findCards) {
-                    const cardsInfo = await ankiInvoke("cardsInfo", 6, { cards: findCards });
-                    if (cardsInfo) {
-                        setRevision(cardsInfo);
+                const findCardsInReview = await ankiInvoke("findCards", 6, { query: "deck:Review" });
+                if (findCardsInReview) {
+                    const moveCardsToLille = await ankiInvoke("changeDeck", 6, { cards: findCardsInReview, deck: "Lille" });
+                }
+                const findCardsInLille = await ankiInvoke("findCards", 6, { query: "deck:Lille" });
+                const areDue = await ankiInvoke("areDue", 6, { cards: findCardsInLille });
+                const cardsInfo = await ankiInvoke("cardsInfo", 6, { cards: findCardsInLille });
+                const dueCards = [];
+                for (var i = 0; i < areDue.length; i++) {
+                    if (areDue[i]) {
+                        dueCards.push(cardsInfo[i]);
                     }
                 }
+                setRevision(cardsInfo);
+                setDueRevision(dueCards)
             }
             getCards();
             const getNotes = async () => {
                 const findNotes = await ankiInvoke("findNotes", 6, { query: "deck:Lille" });
-                if (findNotes) {
-                    const notesInfo = await ankiInvoke("notesInfo", 6, { notes: findNotes });
-                    if (notesInfo) {
-                        setNotes(notesInfo);
-                    }
-                }
+                const notesInfo = await ankiInvoke("notesInfo", 6, { notes: findNotes });
+                setNotes(notesInfo);
             }
             getNotes();
         } catch (err) {
@@ -49,11 +58,51 @@ export const RevisionList = () => {
         }
     }, [, createRevision, editRevision, deleteRevision, updateRevision]);
 
+    useEffect(() => {
+        try {
+            const reviewCard = async () => {
+                const changeDeckBeforeReview = await ankiInvoke("changeDeck", 6, { cards: [updateRevision.cardId], deck: "Review" });
+
+                const guiDeckReview = await ankiInvoke("guiDeckReview", 6, { name: "Review" });
+                const guiShowAnswer = await ankiInvoke("guiShowAnswer", 6);
+
+                switch (updateRevision.action) {
+                    case 'fail':
+                        const guiFailCard = await ankiInvoke("guiAnswerCard", 6, { ease: 1 });
+                        break;
+                    case 'hard':
+                        const guiHardCard = await ankiInvoke("guiAnswerCard", 6, { ease: 2 });
+                        break;
+                    case 'good':
+                        const guiGoodCard = await ankiInvoke("guiAnswerCard", 6, { ease: 3 });
+                        break;
+                    case 'easy':
+                        const guiEasyCard = await ankiInvoke("guiAnswerCard", 6, { ease: 4 });
+                        break;
+                    case 'suspend':
+                        const suspendCard = await ankiInvoke("suspend", 6, { cards: updateRevision.cardId });
+                        if (!suspendCard) {
+                            const unsuspendCard = await ankiInvoke("unsuspend", 6, { cards: updateRevision.cardId });
+                        }
+                        break;
+                }
+                const changeDeckAfterReview = await ankiInvoke("changeDeck", 6, { cards: [updateRevision.cardId], deck: "Lille" });
+
+            }
+            if (updateRevision) {
+                reviewCard();
+                setUpdateRevision();
+            }
+        } catch (err) {
+            console.log(err.message);
+        }
+    }, [updateRevision]);
+
     const modifyFormatter = (cell, row, rowIndex) => {
         return (
             <>
-                {/* <Button variant="secondary" onClick={() => { setUpdateRevision({cardID:cell, action:'bury'}) }}>Bury</Button> */}
-                <Button variant="secondary" onClick={() => { setUpdateRevision({ cardID: cell, action: 'suspend' }) }}>Suspend</Button>
+                {/* <Button variant="secondary" onClick={() => { setUpdateRevision({cardId:cell, action:'bury'}) }}>Bury</Button> */}
+                <Button variant="secondary" onClick={() => { setUpdateRevision({ cardId: cell, action: 'suspend' }) }}>Suspend</Button>
                 <Button variant="primary" onClick={() => { setEditRevision(cell) }}>Modify</Button>
                 <Button variant="danger" onClick={() => { setDeleteRevision(cell) }}>Delete</Button>
 
@@ -65,21 +114,21 @@ export const RevisionList = () => {
         return (
             <>
 
-                <Button variant="danger" onClick={() => { setUpdateRevision({ cardID: cell, action: 'fail' }) }}>Fail</Button>
-                <Button variant="warning" onClick={() => { setUpdateRevision({ cardID: cell, action: 'hard' }) }}>Hard</Button>
-                <Button variant="success" onClick={() => { setUpdateRevision({ cardID: cell, action: 'good' }) }}>Good</Button>
-                <Button variant="light" onClick={() => { setUpdateRevision({ cardID: cell, action: 'easy' }) }}>Easy</Button>
+                <Button variant="danger" onClick={() => { setUpdateRevision({ cardId: cell, action: 'fail' }) }}>Fail</Button>
+                <Button variant="warning" onClick={() => { setUpdateRevision({ cardId: cell, action: 'hard' }) }}>Hard</Button>
+                <Button variant="success" onClick={() => { setUpdateRevision({ cardId: cell, action: 'good' }) }}>Good</Button>
+                <Button variant="light" onClick={() => { setUpdateRevision({ cardId: cell, action: 'easy' }) }}>Easy</Button>
             </>
         )
     }
 
-    const intervalFormatter = (cell, row, rowIndex) => {
-        if (parseInt(cell) == 0) {
+    const dueFormatter = (cell, row, rowIndex) => {
+        if (parseInt(cell) === 0) {
             return "Now";
         } else if (parseInt(cell) < 0) {
             return parseInt(cell) / 60 + " min";
         } else {
-            return parseInt(cell) + " day";
+            return new Date(cell*1000).toLocaleDateString("en-MY");
         }
     }
 
@@ -97,25 +146,39 @@ export const RevisionList = () => {
         order: "asc"
     }];
 
-    const columns = [
+    const dueRevisionColumns = [
         {
-            dataField: "ord",
-            text: "Order",
+            dataField: "due",
+            text: "Due",
             sort: true,
+            formatter: dueFormatter
         },
         {
             dataField: "fields.Front.value",
             text: "Title"
         },
         {
-            dataField: "interval",
-            text: "Due",
-            formatter: intervalFormatter
-        },
-        {
             dataField: "cardId",
             text: "",
             formatter: reviewFormatter
+        },
+        {
+            dataField: "note",
+            text: "",
+            formatter: modifyFormatter
+        }
+    ];
+
+    const allRevisionColumns = [
+        {
+            dataField: "due",
+            text: "Due",
+            sort: true,
+            formatter: dueFormatter
+        },
+        {
+            dataField: "fields.Front.value",
+            text: "Title"
         },
         {
             dataField: "note",
@@ -149,14 +212,37 @@ export const RevisionList = () => {
 
                     </Fab>
                 }
+                <Tabs defaultActiveKey="due">
+                    {
+                        dueRevision.length !== 0 &&
+                        <Tab eventKey="due" title="Due" >
+                            <BootstrapTable
+                                keyField="cardId"
+                                data={dueRevision}
+                                columns={dueRevisionColumns}
+                                defaultSorted={defaultSorted}
+                                expandRow={expandRow}
+                            />
+                        </Tab>
+                    }
+                    {
+                        dueRevision.length === 0 &&
+                        <Tab eventKey="due" title="Due" >
+                            <Alert key="due" variant="primary">Currently, there are no cards to review.</Alert>
+                        </Tab>
+                    }
 
-                <BootstrapTable
-                    keyField="cardId"
-                    data={revision}
-                    columns={columns}
-                    defaultSorted={defaultSorted}
-                    expandRow={expandRow}
-                />
+                    <Tab eventKey="all" title="All" >
+                        <BootstrapTable
+                            keyField="cardId"
+                            data={revision}
+                            columns={allRevisionColumns}
+                            defaultSorted={defaultSorted}
+                            expandRow={expandRow}
+                        />
+                    </Tab>
+                </Tabs>
+
             </Container>
             {
                 createRevision &&
@@ -209,7 +295,7 @@ export const RevisionList = () => {
                     onConfirm={() => {
                         try {
                             const removeNote = async () => {
-                                const deleteNote = await ankiInvoke("deleteNotes", 6, {notes:[deleteRevision]});
+                                const deleteNote = await ankiInvoke("deleteNotes", 6, { notes: [deleteRevision] });
                                 setDeleteRevision(null);
                             }
                             removeNote();
