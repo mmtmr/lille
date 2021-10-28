@@ -151,7 +151,7 @@ export const RevisionList = () => {
                 }
 
                 <BootstrapTable
-                    keyField="rvs_id"
+                    keyField="cardId"
                     data={revision}
                     columns={columns}
                     defaultSorted={defaultSorted}
