@@ -12,6 +12,7 @@ This a personal task management system that is customized to suit the developer'
 - [ ]Visitors
 - [ ]Notion.API implementation
 - [x]Spaced repetition
+- []Server to host Anki
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
