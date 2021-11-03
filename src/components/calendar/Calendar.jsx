@@ -1,6 +1,6 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -12,88 +12,16 @@ import axios from 'axios'
 import "@fortawesome/fontawesome-free/css/all.css"
 import { Tooltip } from "bootstrap/dist/js/bootstrap.esm.min.js"
 
-export default class Calendar extends React.Component {
+export const Calendar = () => {
+    const [weekendVisible, setWeekendVisible] = useState(true);
+    const [currentEvents, setCurrentEvents] = useState([]);
 
-    state = {
-        weekendsVisible: true,
-        currentEvents: []
-    }
 
-    componentDidMount() {
+    useEffect(() => {
         useTimetable();
-    }
-    render() {
-        // const ce = this.state.timetable;
-        // console.log(ce);
-        return (
-                    <FullCalendar
-                       
-                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, googleCalendarPlugin, iCalendarPlugin]}
-                        headerToolbar={{
-                            left: 'title',
-                            center: 'dayGridMonth,timeGridWeek,timeGridDay',
-                            right: 'prev,next,today'
-                        }}
-                        initialView='dayGridMonth'
-                        buttonText={{
-                            listYear: 'year',
-                            listMonth: 'month',
-                            listWeek: 'week',
-                            listDay: 'day'
-                        }}
-                        footerToolbar={{
-                            center: 'listYear,listMonth,listWeek,listDay'
-                        }}
-                        firstDay={1}
-                        selectable={true}
-                        selectMirror={true}
-                        //select={this.handleDateSelect}
-                        eventClick={this.handleEventClick}
-                        //eventContent={renderEventContent}
-                        weekNumbers={true}
-                        weekNumberCalculation={calculateWeekNumber}
-                        googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
-                        eventContent={renderEventContent}
-                        eventDidMount={
-                            (info) => {
-                                var tooltip = new Tooltip(info.el, {
-                                    title: '@' + info.event.extendedProps.location + ' by ' + info.event.extendedProps.lecturer,
-                                    placement: 'top',
-                                    trigger: 'hover',
-                                    container: 'body'
-                                });
-                            }
-                        }
-                        eventSources={[
-                            { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
-                            { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
-                            { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
-                            //{ googleCalendarId: '13h4uict96okp7hnmnq0m28fisn8k15c@import.calendar.google.com', color: 'violet', textColor: 'blue' }, //moodle assignment submission deadline
-                            {
-                                url: '/api/apuCourse',
-                                method: 'GET',
-                                failure: function () {
-                                    alert('there was an error while fetching events!');
-                                },
-                                color: 'mediumseagreen',   // a non-ajax option
-                            },
-                            {
-                                url:'https://stormy-bastion-22629.herokuapp.com/https://lms2.apiit.edu.my/calendar/export_execute.php?userid=40338&authtoken=493c4503582bbf37a4df8ae70d9c07bd27d8d99e&preset_what=all&preset_time=recentupcoming',
-                                format:'ics',
-                                color: 'violet',
-                                textColor: 'blue'
-                            }
+    }, [])
 
-                        ]}
-
-
-                    />
-            
-
-        )
-    }
-    handleEventClick = (clickInfo) => {
-
+    const handleEventClick = (clickInfo) => {
         clickInfo.jsEvent.preventDefault();
         if (clickInfo.event.url) {
             if (confirm(`Are you sure you want to open new tab for the event '${clickInfo.event.title}'?`)) {
@@ -102,10 +30,77 @@ export default class Calendar extends React.Component {
         }
 
     }
+
+    return (
+        <FullCalendar
+
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, googleCalendarPlugin, iCalendarPlugin]}
+            headerToolbar={{
+                left: 'title',
+                center: 'dayGridMonth,timeGridWeek,timeGridDay',
+                right: 'prev,next,today'
+            }}
+            initialView='dayGridMonth'
+            buttonText={{
+                listYear: 'year',
+                listMonth: 'month',
+                listWeek: 'week',
+                listDay: 'day'
+            }}
+            footerToolbar={{
+                center: 'listYear,listMonth,listWeek,listDay'
+            }}
+            firstDay={1}
+            selectable={true}
+            selectMirror={true}
+            //select={this.handleDateSelect}
+            eventClick={handleEventClick}
+            //eventContent={renderEventContent}
+            weekNumbers={true}
+            weekNumberCalculation={calculateWeekNumber}
+            googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
+            eventContent={renderEventContent}
+            eventDidMount={
+                (info) => {
+                    var tooltip = new Tooltip(info.el, {
+                        title: '@' + info.event.extendedProps.location + ' by ' + info.event.extendedProps.lecturer,
+                        placement: 'top',
+                        trigger: 'hover',
+                        container: 'body'
+                    });
+                }
+            }
+            eventSources={[
+                { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
+                { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
+                { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
+                //{ googleCalendarId: '13h4uict96okp7hnmnq0m28fisn8k15c@import.calendar.google.com', color: 'violet', textColor: 'blue' }, //moodle assignment submission deadline
+                {
+                    url: '/api/apuCourse',
+                    method: 'GET',
+                    failure: function () {
+                        alert('there was an error while fetching events!');
+                    },
+                    color: 'mediumseagreen',   // a non-ajax option
+                },
+                {
+                    url: 'https://stormy-bastion-22629.herokuapp.com/https://lms2.apiit.edu.my/calendar/export_execute.php?userid=40338&authtoken=493c4503582bbf37a4df8ae70d9c07bd27d8d99e&preset_what=all&preset_time=recentupcoming',
+                    format: 'ics',
+                    color: 'violet',
+                    textColor: 'blue'
+                }
+
+            ]}
+
+
+        />
+
+
+    )
 }
 
 
-function calculateWeekNumber(date) {
+const calculateWeekNumber = (date) => {
     let i = 0;
     let currentTime = date.getTime();
     //const firstAcademicDay = new Date(2021, 5, 7);
@@ -117,7 +112,7 @@ function calculateWeekNumber(date) {
 }
 
 
-function useTimetable() {
+const useTimetable = () => {
     function generateURL() {
         const d = new Date(2021, 5, 14);
         const oneMonthFromToday = new Date().setDate(new Date().getDate() + 28);
@@ -172,35 +167,13 @@ function useTimetable() {
 }
 
 
-function renderEventContent(eventInfo) {
-    // function getDt (dt) {
-    //     let year = "" + dt.getFullYear();
-    //     let month = "" + (dt.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
-    //     let day = "" + dt.getDate(); if (day.length == 1) { day = "0" + day; }
-    //     let hour = "" + dt.getHours(); if (hour.length == 1) { hour = "0" + hour; }
-    //     let minute = "" + dt.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
-    //     let second = "" + dt.getSeconds(); if (second.length == 1) { second = "0" + second; }
-    //     return year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-    //   }
-    //   function checkNull(prop){
-    //       if (!prop) return '-';
-    //       else return prop;
-    //   }
+const renderEventContent = (eventInfo) => {
     if (eventInfo.event.extendedProps.lecturer && eventInfo.view.type === 'dayGridMonth') {
         return (
             <>
                 <b>{eventInfo.timeText}</b> {eventInfo.event.extendedProps.course_code} ({eventInfo.event.extendedProps.course_type})
             </>
         )
-        // Alert.alert(
-        //     'Event Details',
-        //     'Location: '+checkNull(clickInfo.event.extendedProps.location)+'\n'+
-        //     'Lecture: '+clickInfo.event.extendedProps.lecturer+'\n'+
-        //     'Description:'+checkNull(clickInfo.event.extendedProps.description),
-        //     [
-        //         { text: "OK", onPress: () => console.log("OK Pressed") }
-        //       ]
-        // );
 
     }
 
