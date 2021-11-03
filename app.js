@@ -18,6 +18,9 @@ app.use("/dashboard", require("./routes/dashboard"));
 
 
 app.use(express.static('dist'));
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/dist/index.html'));
+  });
 // app.get('', (req, res) => {
 //     res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
 // });
