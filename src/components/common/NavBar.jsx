@@ -4,8 +4,21 @@ import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import NavDropdown from 'react-bootstrap/NavDropdown'
 import Container from 'react-bootstrap/Container'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
-export const NavBar = () => {
+export const NavBar = ({ setAuth }) => {
+    const handleLogout = async e => {
+        e.preventDefault();
+        try {
+          localStorage.removeItem("token");
+          setAuth(false);
+          toast.success("Logout successfully");
+        } catch (err) {
+          console.error(err.message);
+        }
+      };
+    
     return (
         <>
             <Navbar bg="dark" variant="dark">
@@ -20,6 +33,9 @@ export const NavBar = () => {
                             <NavDropdown.Item href="./chart">Chart</NavDropdown.Item>
                         </NavDropdown>
                     </Nav>
+                    <Form className="d-flex">
+                        <Button variant="outline-danger" onClick={e => handleLogout(e)}>Logout</Button>
+                    </Form>
                 </Container>
             </Navbar>
         </>

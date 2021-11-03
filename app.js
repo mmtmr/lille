@@ -12,29 +12,39 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(__dirname + '/dist'));
 }
 
-app.get('', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
-});
+//register and login routes
+app.use("/auth",require("./routes/jwtAuth"))
+app.use("/dashboard", require("./routes/dashboard"));
 
 
-app.get('/calendar', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
-});
+app.use(express.static('dist'));
+// app.get('', (req, res) => {
+//     res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
+// });
 
-app.get('/task', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/dist', 'task.html'));
-});
-app.get('/timelog', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/dist', 'timelog.html'));
-});
 
-app.get('/chart', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/dist', 'chart.html'));
-});
+// app.get('/calendar', (req, res) => {
+//     res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
+// });
 
-app.get('/revision', (req, res) => {
-    res.sendFile(path.resolve(__dirname + '/dist', 'revision.html'));
-});
+// app.get('/task', (req, res) => {
+//     res.sendFile(path.resolve(__dirname + '/dist', 'task.html'));
+// });
+// app.get('/timelog', (req, res) => {
+//     res.sendFile(path.resolve(__dirname + '/dist', 'timelog.html'));
+// });
+
+// app.get('/chart', (req, res) => {
+//     res.sendFile(path.resolve(__dirname + '/dist', 'chart.html'));
+// });
+
+// app.get('/revision', (req, res) => {
+//     res.sendFile(path.resolve(__dirname + '/dist', 'revision.html'));
+// });
+
+// app.get('/welcome', (req, res) => {
+//     res.sendFile(path.resolve(__dirname + '/dist', 'welcome.html'));
+// });
 
 
 app.get('/api/apuCourse', async (req, res) => {
@@ -58,7 +68,7 @@ app.post('/api/apuCourse/:urlDate', (req, res) => {
         json: true,
     })
         .then(html => {
-            //console.log(html);
+            // console.log(html);
             let $ = cheerio.load(html);
             // find what element ids, classes, or tags you want from opening console in the browser
             // cheerio library lets you select elements similar to querySelector
@@ -106,9 +116,9 @@ app.post('/api/apuCourse/:urlDate', (req, res) => {
                     week: urlDate,
                     cou_code: tableSubject[tableSubject.length - 3]
                 }
-                if (class_event.cou_code === '2 PSMOD') class_event.cou_code = 'PSMOD';
+                // if (class_event.cou_code === '2 PSMOD') class_event.cou_code = 'PSMOD';
                 //console.log(class_event);
-                var subjectShort = ['SDM', 'PSMOD', 'PFDA', 'DTM', 'OODJ', 'COMT', 'WPCS'];//Modify each semester
+                var subjectShort = ['DMPM', 'CCP', 'EET', 'RMCT', 'CRI', 'DSTR', 'BIS'];//Modify each semester
                 for (let k = 0; k < subjectShort.length + 1; k++) {
                     if ((class_event.cou_code).indexOf(subjectShort[k]) !== -1) {
                         //console.log(class_event);
@@ -120,7 +130,7 @@ app.post('/api/apuCourse/:urlDate', (req, res) => {
             }
             return ce;
         })
-        .then(ce => { ce.map(e => insertCE(e)); res.sendStatus(ce); })
+        .then(ce => { ce.map(e => insertCE(e)); res.sendStatus(500); })
         .then(updateCETitle)
         .catch(function (err) {
             console.error(err.message + ' ' + urlDate);
@@ -172,7 +182,7 @@ app.post('/api/task/:tsk_id', async (req, res) => {
         const { tsk_id } = req.params;
         const { st_name } = req.body;
         const newTask = await pool.query(
-            "INSERT INTO subtask_t (st_name,tsk_id) VALUES ($1,$2,$3)", [st_name, tsk_id]
+            "INSERT INTO subtask_t (st_name,tsk_id) VALUES ($1,$2)", [st_name, tsk_id]
         );
     } catch (err) {
         console.error(err.message);
@@ -463,6 +473,7 @@ app.delete('/api/timelog/:tl_id', async (req, res) => {
         res.sendStatus(500);
     }
 });
+
 
 app.get("*",(req,res)=>{
     res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));

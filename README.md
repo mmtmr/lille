@@ -6,7 +6,7 @@ This a personal task management system that is customized to suit the developer'
 - [ ]Archive Function to hide the task/or one time task
 - [ ]Calendar settings to auto-generate class schedule
 - [x]Review on time log chart
-- [ ]Login system
+- [x]Login system (For one person, not planning for multiple users)
 - [ ]Theme for calendar
 - [ ]Dashboard
 - [ ]Visitors

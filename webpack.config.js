@@ -1,16 +1,12 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const pages = ["calendar", "task", "timelog", "chart", "revision"]
+const pages = ["welcome", "calendar", "task", "timelog", "chart", "revision"]
 module.exports = {
 
     mode: 'development',
     devtool: 'source-map',
 
-    entry: pages.reduce((config, page) => {
-        config[page] = `./src/${page}.jsx`;
-        return config;
-    }, {}),
-
+    entry: './src/main.jsx',
     resolve: {
         extensions: ['.js', '.jsx']
     },
@@ -45,31 +41,51 @@ module.exports = {
         }
         ]
     },
-    plugins: [].concat(
-        pages.map(
-            (page) => 
-                new HtmlWebpackPlugin({
-                    title: 'Lille',
-                    inject: true,
-                    template: 'public/index.html',
-                    filename: `${page}.html`,
-                    favicon: 'public/favicon.ico',
-                    chunks: [page]
-                }),
-        ),
-    ),
+    // plugins: [].concat(
+    //     pages.map(
+    //         (page) =>
+    //             new HtmlWebpackPlugin({
+    //                 title: 'Lille',
+    //                 inject: true,
+    //                 template: 'public/index.html',
+    //                 filename: `${page}.html`,
+    //                 favicon: 'public/favicon.ico',
+    //                 chunks: [page]
+    //             }),
+    //     ),
+    // ),
+    plugins: [
+        new HtmlWebpackPlugin({
+            title: 'Lille',
+            inject: true,
+            template: 'public/index.html',
+            // filename: `${page}.html`,
+            favicon: 'public/favicon.ico',
+            // chunks: [page]
+        })
+    ],
     output: {
-        filename: '[name].js',
+        filename: 'bundle.js',
         path: path.join(__dirname, 'dist'),
+        publicPath: '/'
     },
 
-devServer: {
-    static: './dist',
-    proxy: {
-        "/api": {
-            target: "http://localhost:5000",
-            }
-    }
-}
+    devServer: {
+        // contentBase: path.join(__dirname, 'public'),
+        historyApiFallback: true,
+        proxy: {
+            "/api": {
+                target: "http://localhost:5000",
+                changeOrigin: true,
+            },
+            "/auth": {
+                target: "http://localhost:5000",
+                changeOrigin: true,
+            },
+        }
+    },
+    stats: {
+        errorDetails: true,
+      },
 
 }
