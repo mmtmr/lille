@@ -13,6 +13,7 @@ This a personal task management system that is customized to suit the developer'
 - [ ]Notion.API implementation
 - [x]Spaced repetition
 - [ ]Server to host Anki
+- [ ]Separate calendar (with json config) and the pure calendar into two projects
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
