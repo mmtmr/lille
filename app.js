@@ -478,9 +478,9 @@ app.delete('/api/timelog/:tl_id', async (req, res) => {
 });
 
 
-app.get("*",(req,res)=>{
-    res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
-});
+// app.get("*",(req,res)=>{
+//     res.sendFile(path.resolve(__dirname + '/dist', 'calendar.html'));
+// });
 
 // app.route('/*')
 //     .get(function (req, res) {
