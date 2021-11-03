@@ -7,7 +7,8 @@
 --     cou_lecturer VARCHAR(50) NOT NULL,
 --     cou_academic_year INT NOT NULL,
 --     cou_academic_semester INT NOT NULL,
---     PRIMARY KEY (cou_code)
+--      intake_group_code VARCHAR(25) NOT NULL,
+--     PRIMARY KEY (cou_code, intake_group_code)
 -- );
 
 -- CREATE TABLE COURSEWORK_T(
@@ -19,7 +20,7 @@
 --     cw_desc VARCHAR(200),
 --     cw_location VARCHAR(50),
 --     cou_code VARCHAR(5) NOT NULL,
---     FOREIGN KEY (cou_code) REFERENCES COURSE_T(cou_code)
+--     FOREIGN KEY (cou_code,intake_group_code) REFERENCES COURSE_T(cou_code,intake_group_code)
 -- );
 
 -- CREATE TABLE CLASS_EVENT_T(
@@ -33,7 +34,8 @@
 --     ce_replacement BOOLEAN NOT NULL DEFAULT FALSE,
 --     ce_week CHAR(10) NOT NULL,
 --     cou_code VARCHAR(5) NOT NULL,
---     FOREIGN KEY (cou_code) REFERENCES COURSE_T(cou_code),
+--     intake_group_code VARCHAR(25) NOT NULL,
+--     FOREIGN KEY (cou_code,intake_group_code) REFERENCES COURSE_T(cou_code,intake_group_code)
 --     CONSTRAINT UQ_CLASS_EVENT_T UNIQUE(ce_type, cou_code, ce_week)
 -- );
 
@@ -115,3 +117,32 @@ CREATE TABLE TL_ST_RELATION_T(
     st_id INT REFERENCES SUBTASK_T(st_id),
     CONSTRAINT tsr_id PRIMARY KEY (tl_id, st_id)
 );
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE TABLE USER_T(
+    user_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_name VARCHAR(255) NOT NULL,
+    user_email VARCHAR(255) NOT NULL,
+    user_password VARCHAR(255) NOT NULL
+);
+
+-- INSERT INTO COURSE_T
+-- VALUES ('DMPM','Data Mining and Predictive Modeling','DR. PREETHI SUBRAMANIAN',2,2);
+
+-- INSERT INTO COURSE_T
+-- VALUES ('CCP','Concurrent Programming','ZAILAN ARABEE BIN ABDUL SALAM',2,2);
+
+-- INSERT INTO COURSE_T
+-- VALUES ('EET','Employee & Employment Trends','HALIMATON BINTI YUSOF',2,2);
+
+-- INSERT INTO COURSE_T
+-- VALUES ('RMCT','Research Methods for Computing and Technology','TAN CHYE CHEAH ',2,2);
+
+-- INSERT INTO COURSE_T
+-- VALUES ('CRI','Creativity & Innovation','HASLINA HASHIM',2,2);
+
+-- INSERT INTO COURSE_T
+-- VALUES ('DSTR','Data Structures','CHONG MIEN MAY',2,2);
+
+-- INSERT INTO COURSE_T
+-- VALUES ('BIS','Business Intelligence Systems','MOHAMMAD NAMAZEE BIN MOHD NIZAM',2,2);
