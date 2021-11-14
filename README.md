@@ -14,6 +14,6 @@ This a personal task management system that is customized to suit the developer'
 - [x]Spaced repetition
 - [ ]Server to host Anki
 - [ ]Separate calendar (with json config) and the pure calendar into two projects
-
+- [ ]Excel presentation of time log
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
