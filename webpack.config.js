@@ -1,6 +1,5 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const pages = ["welcome", "calendar", "task", "timelog", "chart", "revision"]
 module.exports = {
 
     mode: 'development',
