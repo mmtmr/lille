@@ -3,10 +3,11 @@ const authorize = require("../middleware/authorize");
 const pool = require("../db");
 
 router.get("/", authorize, async (req, res) => {
+  const user_id='84d81b06-5f3b-4e6e-8320-61391fe59bbe';
   try {
     const user = await pool.query(
-      "SELECT user_name FROM users WHERE user_id = $1",
-      [req.user.id] 
+      "SELECT user_name FROM USER_T WHERE user_id = $1",
+      [user_id] 
     ); 
     
   //if would be req.user if you change your payload to this:

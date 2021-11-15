@@ -7,12 +7,15 @@ export const Dashboard = ({ setAuth }) => {
   const getProfile = async () => {
     try {
       const res = await fetch("/dashboard", {
-        method: "POST",
+        method: "GET",
         headers: { jwt_token: localStorage.token }
       });
 
       const parseData = await res.json();
-      setName(parseData.user_name);
+      if (parseData) {
+        console.log(parseData);
+        setAuth(parseData.user_name);
+      }
     } catch (err) {
       console.error(err.message);
     }

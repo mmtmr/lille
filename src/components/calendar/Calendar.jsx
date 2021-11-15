@@ -82,6 +82,9 @@ export const Calendar = () => {
                         alert('there was an error while fetching events!');
                     },
                     color: 'mediumseagreen',   // a non-ajax option
+                    extraParams:{
+                        headers: [{ jwt_token: localStorage.token }]
+                    }
                 },
                 {
                     url: 'https://stormy-bastion-22629.herokuapp.com/https://lms2.apiit.edu.my/calendar/export_execute.php?userid=40338&authtoken=493c4503582bbf37a4df8ae70d9c07bd27d8d99e&preset_what=all&preset_time=recentupcoming',
