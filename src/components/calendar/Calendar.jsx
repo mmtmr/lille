@@ -107,7 +107,7 @@ const calculateWeekNumber = (date) => {
     let i = 0;
     let currentTime = date.getTime();
     //const firstAcademicDay = new Date(2021, 5, 7);
-    const firstAcademicTime = new Date(2021, 5, 7).getTime();
+    const firstAcademicTime = new Date(2021, 10, 8).getTime();
     for (; currentTime >= firstAcademicTime; i++) {
         currentTime = currentTime - 6.048e+8;
     }

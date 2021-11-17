@@ -42,7 +42,7 @@ export const PublicRoute = ({ component: Component, ...restOfProps }) => {
                         <WelcomeBar />
                         <Component {...props} setAuth={setAuth} />
                     </>
-                    : (isLoading ? 'Loading...' : <Redirect to="/dashboard" />)
+                    : (isLoading ? 'Loading...' : <Redirect to="/calendar" />)
             }
         />
     );

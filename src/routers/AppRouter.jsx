@@ -22,7 +22,6 @@ export const AppRouter = () => {
         <>
 
             <Router>
-
                 <PublicRoute exact path="/login" component={Login} />
                 {/* <PublicRoute exact path="/register" component={Register} /> */}
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
