@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const cheerio = require("cheerio");
 const pool = require("../db");
+var rp = require("request-promise");
 
 router.get('/', async (req, res) => {
 
