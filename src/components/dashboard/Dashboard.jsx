@@ -12,21 +12,11 @@ export const Dashboard = ({ setAuth }) => {
       });
 
       const parseData = await res.json();
+
       if (parseData) {
         console.log(parseData);
-        setAuth(parseData.user_name);
+        setName(parseData.user_name);
       }
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-
-  const logout = async e => {
-    e.preventDefault();
-    try {
-      localStorage.removeItem("token");
-      setAuth(false);
-      toast.success("Logout successfully");
     } catch (err) {
       console.error(err.message);
     }
@@ -40,9 +30,7 @@ export const Dashboard = ({ setAuth }) => {
     <div>
       <h1 className="mt-5">Dashboard</h1>
       <h2>Welcome {name}</h2>
-      <button onClick={e => logout(e)} className="btn btn-primary">
-        Logout
-      </button>
+
     </div>
   );
 };

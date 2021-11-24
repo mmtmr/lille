@@ -83,7 +83,7 @@ export const Calendar = () => {
                     },
                     color: 'mediumseagreen',   // a non-ajax option
                     extraParams:{
-                        headers: [{ jwt_token: localStorage.token }]
+                        headers: [{ jwt_token: localStorage.token, rt_token:localStorage.refreshToken }]
                     }
                 },
                 {

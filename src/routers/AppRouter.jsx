@@ -8,9 +8,9 @@ import { ChartPanel } from '../components/chart/ChartPanel';
 import { RevisionList } from '../components/revision/RevisionList';
 import { TaskList } from '../components/task/TaskList';
 import { TimeLogList } from '../components/timelog/TimeLogList';
-import { Login } from '../components/welcome/Login';
-import { Register } from '../components/welcome/Register';
-import { Dashboard } from '../components/welcome/Dashboard';
+import { Login } from '../components/access/Login';
+import { Register } from '../components/access/Register';
+import { Dashboard } from '../components/dashboard/Dashboard';
 
 import { toast } from "react-toastify";
 
@@ -22,7 +22,7 @@ export const AppRouter = () => {
         try {
             const res = await fetch("/auth/verify", {
                 method: "POST",
-                headers: { jwt_token: localStorage.token }
+                headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }
             });
             const success = res.ok;
             return success;

@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const pool = require("../db");
 const validInfo = require("../middleware/validInfo");
 const jwtGenerator = require("../utils/jwtGenerator");
+const rtGenerator = require("../utils/rtGenerator");
 const authorize = require("../middleware/authorize");
 
 //authorizeentication
@@ -30,8 +31,9 @@ router.post("/register", validInfo, async (req, res) => {
     );
 
     const jwtToken = jwtGenerator(newUser.rows[0].user_id);
+    const rtToken = rtGenerator(newUser.rows[0].user_id);
 
-    return res.status(200).json({ jwtToken });
+    return res.status(200).json({ jwtToken, rtToken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -60,7 +62,8 @@ router.post("/login", validInfo, async (req, res) => {
       return res.status(401).json("Invalid Credential");
     }
     const jwtToken = jwtGenerator(user.rows[0].user_id);
-    return res.status(200).json({ jwtToken });
+    const rtToken = rtGenerator(user.rows[0].user_id);
+    return res.status(200).json({ jwtToken, rtToken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -68,8 +71,9 @@ router.post("/login", validInfo, async (req, res) => {
 });
 
 router.post("/verify", authorize, (req, res) => {
+  const jwtToken=req.jwtToken;
   try {
-    res.status(200).json(true);
+    res.status(200).json({ jwtToken });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");

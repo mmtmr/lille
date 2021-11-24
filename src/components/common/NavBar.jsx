@@ -14,6 +14,7 @@ export const NavBar = ({ setAuth }) => {
         e.preventDefault();
         try {
           localStorage.removeItem("token");
+          localStorage.removeItem("refreshToken");
           setAuth(false);
           toast.success("Logout successfully");
         } catch (err) {

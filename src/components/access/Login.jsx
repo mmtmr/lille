@@ -7,10 +7,11 @@ import { toast } from "react-toastify";
 export const Login = ({ setAuth }) => {
   const [inputs, setInputs] = useState({
     user_email: "",
-    user_password: ""
+    user_password: "",
+    remember_login: false
   });
 
-  const { user_email, user_password } = inputs;
+  const { user_email, user_password, remember_login } = inputs;
 
   const onChange = e =>
     setInputs({ ...inputs, [e.target.name]: e.target.value });
@@ -32,8 +33,11 @@ export const Login = ({ setAuth }) => {
 
       const parseRes = await response.json();
 
-      if (parseRes.jwtToken) {
+      if (parseRes.jwtToken && parseRes.rtToken) {
         localStorage.setItem("token", parseRes.jwtToken);
+        if(remember_login){
+          localStorage.setItem("refreshToken", parseRes.rtToken);
+        }
         setAuth(true);
         toast.success("Login Successfully");
       } else {
@@ -71,6 +75,13 @@ export const Login = ({ setAuth }) => {
               />
             </Form.Group>
             <br />
+            <Form.Check
+              type="checkbox"
+              name="remember_login"
+              label="Keep me log in for 3 months"
+              onChange={e => onChange(e)}
+              />
+              <br />
             <Button type="submit" variant="success">Login</Button>
           </Form>
           
