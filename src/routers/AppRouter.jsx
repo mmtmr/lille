@@ -18,18 +18,47 @@ toast.configure();
 
 export const AppRouter = () => {
 
+    const checkAuthenticated = async () => {
+        try {
+            const res = await fetch("/auth/verify", {
+                method: "POST",
+                headers: { jwt_token: localStorage.token }
+            });
+            const success = res.ok;
+            return success;
+        } catch (err) {
+            console.error(err.message);
+        }
+    };
+
+    useEffect(() => {
+        checkAuthenticated()
+            .then(success => {
+                console.log(success);
+                setIsAuthenticated(success);
+                setIsLoading(false);
+            })
+    }, []);
+
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const setAuth = boolean => {
+        setIsAuthenticated(boolean);
+    };
+
     return (
         <>
 
             <Router>
-                <PublicRoute exact path="/login" component={Login} />
+                <PublicRoute exact path="/login" component={Login} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
                 {/* <PublicRoute exact path="/register" component={Register} /> */}
-                <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                <ProtectedRoute exact path="/calendar" component={Calendar} />
-                <ProtectedRoute exact path="/chart" component={ChartPanel} />
-                <ProtectedRoute exact path="/revision" component={RevisionList} />
-                <ProtectedRoute exact path="/task" component={TaskList} />
-                <ProtectedRoute exact path="/timelog" component={TimeLogList} />
+                <ProtectedRoute exact path="/dashboard" component={Dashboard} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
+                <ProtectedRoute exact path="/calendar" component={Calendar} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
+                <ProtectedRoute exact path="/chart" component={ChartPanel} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
+                <ProtectedRoute exact path="/revision" component={RevisionList} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
+                <ProtectedRoute exact path="/task" component={TaskList} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
+                <ProtectedRoute exact path="/timelog" component={TimeLogList} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
                 {/* <ProtectedRoute component={Calendar} isAuthenticated={isAuthenticated} /> */}
             </Router>
         </>

@@ -6,7 +6,9 @@ import NavDropdown from 'react-bootstrap/NavDropdown'
 import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import { toast } from "react-toastify";
 
+toast.configure();
 export const NavBar = ({ setAuth }) => {
     const handleLogout = async e => {
         e.preventDefault();
