@@ -20,17 +20,18 @@ router.post('/:urlDate', (req, res) => {
     var ce = [];
     var urlDate = req.params.urlDate;
     rp({
-        url: `https://api.apiit.edu.my/timetable-print/index.php?Week=${urlDate}&Intake=APU2F2106CS(DA)&Intake_Group=G1&print_request=print_tt`,
+        url: `https://api.apiit.edu.my/timetable-print/index.php?Week=${urlDate}&Intake=APU2F2106CS(DA)&Intake_Group=All&print_request=print_tt`,
         headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/38.0.2125.111 Safari/537.36' },
         json: true,
     })
         .then(html => {
-            // console.log(html);
+            //console.log(html);
             let $ = cheerio.load(html);
             // find what element ids, classes, or tags you want from opening console in the browser
             // cheerio library lets you select elements similar to querySelector
             $('td').each(function (i, element) {
                 table[i] = $(this).text();
+                console.log(table[i]);
             });
 
 
@@ -87,7 +88,7 @@ router.post('/:urlDate', (req, res) => {
             }
             return ce;
         })
-        .then(ce => { ce.map(e => insertCE(e)); res.sendStatus(500); })
+        .then(ce => { ce.map(e => insertCE(e)); res.sendStatus(200); })
         .then(updateCETitle)
         .catch(function (err) {
             console.error(err.message + ' ' + urlDate);
