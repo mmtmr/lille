@@ -5,6 +5,6 @@ import 'react-toastify/dist/ReactToastify.css'
 export const App=()=>(
         <>
         <AppRouter />
-        <ToastContainer autoClose={5000}/>
+        <ToastContainer autoClose={5000} theme="dark"/>
         </>
 )
