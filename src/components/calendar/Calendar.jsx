@@ -1,6 +1,6 @@
 import "core-js/stable";
 import "regenerator-runtime/runtime";
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -30,6 +30,27 @@ export const Calendar = () => {
         }
 
     }
+    const generateTooltip = (info) => {
+        try {
+          const generateTooltipTitle = (info) => {
+            if (info.event.extendedProps.location && info.event.extendedProps.lecturer) {
+              return '@' + String(info.event.extendedProps.location) + ' by ' + String(info.event.extendedProps.lecturer)
+    
+            } else if (info.event.extendedProps.location) {
+              return '@' + String(info.event.extendedProps.location)
+            } else { return String(info.event.title); }
+          }
+          var title = String(generateTooltipTitle(info));
+    
+          var tooltip = new Tooltip(info.el, {
+            title: title,
+            placement: 'top',
+            trigger: 'hover',
+            container: 'body'
+          });
+        } catch (err) { console.log(err); }
+      }
+    
 
     return (
         <FullCalendar
@@ -50,6 +71,7 @@ export const Calendar = () => {
             footerToolbar={{
                 center: 'listYear,listMonth,listWeek,listDay'
             }}
+            nowIndicator={true}
             firstDay={1}
             selectable={true}
             selectMirror={true}
@@ -60,16 +82,7 @@ export const Calendar = () => {
             weekNumberCalculation={calculateWeekNumber}
             googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
             eventContent={renderEventContent}
-            eventDidMount={
-                (info) => {
-                    var tooltip = new Tooltip(info.el, {
-                        title: '@' + info.event.extendedProps.location + ' by ' + info.event.extendedProps.lecturer,
-                        placement: 'top',
-                        trigger: 'hover',
-                        container: 'body'
-                    });
-                }
-            }
+            eventDidMount={generateTooltip}
             eventSources={[
                 { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
                 { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
@@ -82,8 +95,8 @@ export const Calendar = () => {
                         alert('there was an error while fetching events!');
                     },
                     color: 'mediumseagreen',   // a non-ajax option
-                    extraParams:{
-                        headers: [{ jwt_token: localStorage.token, rt_token:localStorage.refreshToken }]
+                    extraParams: {
+                        headers: [{ jwt_token: localStorage.token, rt_token: localStorage.refreshToken }]
                     }
                 },
                 {
