@@ -14,7 +14,6 @@ if (process.env.NODE_ENV === 'production') {
 app.use("/auth",require("./routes/jwtAuth"))
 app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/apuCourse", require("./routes/apuCourse"));
-app.use("/api/work", require("./routes/work"));
 app.use("/api/task", require("./routes/task"));
 app.use("/api/timelog", require("./routes/timelog"));
 

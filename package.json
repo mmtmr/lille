@@ -4,6 +4,10 @@
   "proxy": "http://localhost:5000",
   "description": "Personal Management System",
   "main": "index.js",
+  "engines": {
+    "node": "16.5.0",
+    "npm": "7.19.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
