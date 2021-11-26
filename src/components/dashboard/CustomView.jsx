@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import { sliceEvents, createPlugin } from '@fullcalendar/react';
-import lightdesktopvaporwave from '../../../public/light-desktop-vaporwave.jpg';
 import bedroom from '../../../public/bedroom.jpg';
 
 const CustomView = (props) => {
