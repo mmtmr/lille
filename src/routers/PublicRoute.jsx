@@ -13,7 +13,7 @@ export const PublicRoute = ({ component: Component,isAuthenticated, isLoading, s
                         <WelcomeBar />
                         <Component {...props} setAuth={setAuth} />
                     </>
-                    : (isLoading ? 'Loading...' : <Redirect to="/calendar" />)
+                    : (isLoading ? 'Loading...' : <Redirect to="/" />)
             }
         />
     );

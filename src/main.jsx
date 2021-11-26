@@ -5,6 +5,7 @@ import "../public/calendar.css";
 import "../public/task.css";
 import "../public/fullbackground.css";
 import "../public/login.css";
+import "../public/dashboard.css";
 
 import { App } from './App';
 

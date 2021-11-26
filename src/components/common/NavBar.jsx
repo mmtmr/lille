@@ -26,7 +26,7 @@ export const NavBar = ({ setAuth }) => {
         <>
             <Navbar bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand href="#">Lille</Navbar.Brand>
+                    <Navbar.Brand href="./">Lille</Navbar.Brand>
                     <Nav className="me-auto">
                         <Nav.Link href="./calendar">Calendar</Nav.Link>
                         <Nav.Link href="./revision">Revision</Nav.Link>
