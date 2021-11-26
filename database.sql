@@ -11,16 +11,14 @@
 --     PRIMARY KEY (cou_code, intake_group_code)
 -- );
 
--- CREATE TABLE COURSEWORK_T(
---     cw_id SERIAL PRIMARY KEY,
---     cw_type CHAR(3) NOT NULL,
---     cw_title VARCHAR(100),
---     cw_start TIMESTAMP NOT NULL,
---     cw_end TIMESTAMP NOT NULL,
---     cw_desc VARCHAR(200),
---     cw_location VARCHAR(50),
---     cou_code VARCHAR(5) NOT NULL,
---     FOREIGN KEY (cou_code,intake_group_code) REFERENCES COURSE_T(cou_code,intake_group_code)
+-- CREATE TABLE WORK_T(
+--     wrk_id SERIAL PRIMARY KEY,
+--     wrk_title VARCHAR(100),
+--     wrk_start TIMESTAMP NOT NULL,
+--     wrk_end TIMESTAMP NOT NULL,
+--     wrk_desc VARCHAR(200),
+--     cou_code VARCHAR(5),
+--     FOREIGN KEY (cou_code) REFERENCES COURSE_T(cou_code)
 -- );
 
 -- CREATE TABLE CLASS_EVENT_T(

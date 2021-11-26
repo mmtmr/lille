@@ -10,6 +10,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import CustomViewPlugin from './CustomView';
+import {NotionBoard} from './NotionBoard';
 
 export const Dashboard = () => {
 
@@ -33,7 +34,10 @@ export const Dashboard = () => {
         trigger: 'hover',
         container: 'body'
       });
+      
       info.el.style.backgroundColor='rgba(26, 9, 51,0.3)'
+      if(document.getElementsByClassName('fc-list-day')[0]) document.getElementsByClassName('fc-list-day')[0].classList.remove('fc-list-day');
+      if(document.getElementsByClassName('fc-list')[0]) document.getElementsByClassName('fc-list')[0].classList.remove('fc-list');
     } catch (err) { console.log(err); }
   }
 
@@ -75,7 +79,7 @@ export const Dashboard = () => {
 
           />
         </Row>
-        <Row className="height-50">
+        <Row>
           <Col>
             <FullCalendar
 
@@ -114,6 +118,7 @@ export const Dashboard = () => {
             />
           </Col>
           <Col>
+          <NotionBoard />
           </Col>
         </Row>
       </Container>

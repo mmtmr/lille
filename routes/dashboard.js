@@ -1,26 +1,69 @@
 const router = require("express").Router();
 const authorize = require("../middleware/authorize");
-const pool = require("../db");
+const notion = require("../notion");
+require("dotenv").config();
 
-router.get("/", authorize, async (req, res) => {
-  const user_id='84d81b06-5f3b-4e6e-8320-61391fe59bbe';
+const databaseId = process.env.NOTION_DATABASE_ID
+
+//Query database
+router.get('/notion',async(req,res)=>{
   try {
-    const user = await pool.query(
-      "SELECT user_name FROM USER_T WHERE user_id = $1",
-      [user_id] 
-    ); 
-    
-  //if would be req.user if you change your payload to this:
-    
-  //   function jwtGenerator(user_id) {
-  //   const payload = {
-  //     user: user_id
-  //   };
-    res.json(user.rows[0]);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
-  }
-});
+    const response = await notion.databases.query({
+        database_id: databaseId,
+        filter: {
+          and: [
+            {
+              property: 'Status',
+              select: {
+                is_not_empty: true,
+              },
+            },
+            {
+              property: 'Status',
+              select: {
+                does_not_equal: 'Completed',
+              },
+            },
+          ],
+        },
+        sorts: [
+          {
+            property: 'Priority',
+            direction: 'descending',
+          },
+          {
+            property: 'Status',
+            direction: 'descending',
+          },
+        ],
+      });
+      res.json(response.results);
+  } catch (error) {
+    console.error(error.body);
+    res.sendStatus(500);
 
+  }
+})
+
+//Query database
+router.put('/notion',async(req,res)=>{
+  try {
+    const {id}=req.body;
+    const response = await notion.pages.update({
+      page_id: id,
+      properties: {
+        'Status': {
+          select:{
+            "name": "Completed"
+          }
+        },
+      },
+    });
+    res.sendStatus(200);
+  } catch (error) {
+    console.error(error.body);
+    res.sendStatus(500);
+
+  }
+})
 module.exports = router;

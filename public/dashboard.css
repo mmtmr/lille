@@ -23,3 +23,16 @@ footer {
     bottom: 0;
     width: 100%;
    }
+
+  .react-bootstrap-table table {
+    border-collapse: collapse;
+    width: 100%
+  }
+  
+ .react-bootstrap-table table tr {
+    border-bottom: 1px solid white;
+  }
+  
+ .react-bootstrap-table table tr:last-child {
+    border: 0;
+  }
