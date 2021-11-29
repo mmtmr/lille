@@ -21,7 +21,7 @@ export const Login = ({ setAuth }) => {
     try {
       const body = { user_email, user_password };
       const response = await fetch(
-        "/auth/login",
+        "/auth/jwt/login",
         {
           method: "POST",
           headers: {

@@ -62,6 +62,10 @@ module.exports = {
             favicon: 'public/favicon.ico',
             // chunks: [page]
         })
+        // ,
+        // new webpack.ProvidePlugin({
+        //     process: 'process/browser',
+        //   }),
     ],
     output: {
         filename: 'bundle.js',

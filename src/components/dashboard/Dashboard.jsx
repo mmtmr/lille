@@ -44,7 +44,7 @@ export const Dashboard = () => {
 
   return (
     <>
-      <Container className="height-100">
+      <Container>
         <Row className="height-50">
           <FullCalendar
             plugins={[CustomViewPlugin, googleCalendarPlugin, iCalendarPlugin]}
@@ -52,6 +52,7 @@ export const Dashboard = () => {
             headerToolbar={false}
             googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
             eventSources={[
+              { googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink' },
               { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
               { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
               { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
@@ -73,9 +74,8 @@ export const Dashboard = () => {
                 color: 'violet',
                 textColor: 'blue'
               }
-
             ]}
-
+            height="50vh"
 
           />
         </Row>
@@ -87,9 +87,10 @@ export const Dashboard = () => {
               initialView='listDay'
               height="30vh"
               headerToolbar={false}
-              googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
+              googleCalendarApiKey={'AIzaSyC3WkY3kzoBBWgYb_7dIrLe-JaBbN92nRM'}
               eventDidMount={generateTooltip}
               eventSources={[
+                { googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink' },
                 { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
                 { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
                 { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar

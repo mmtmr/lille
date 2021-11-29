@@ -21,7 +21,7 @@ export const Register = ({ setAuth }) => {
     try {
       const body = { user_email, user_password, user_name };
       const response = await fetch(
-        "/auth/register",
+        "/auth/jwt/register",
         {
           method: "POST",
           headers: {
