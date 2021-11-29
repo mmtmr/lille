@@ -7,7 +7,7 @@ export const useFetch = (url) => {
     useEffect(() => {
         const getTask = async () => {
             try {
-                const response = await axios.get(url);
+                const response = await axios.get(url,{headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }});
                 const data = await response?.data;
                 setTask(data);
             } catch (err) {

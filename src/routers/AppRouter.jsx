@@ -11,7 +11,6 @@ import { TimeLogList } from '../components/timelog/TimeLogList';
 import { Login } from '../components/access/Login';
 import { Register } from '../components/access/Register';
 import { Dashboard } from '../components/dashboard/Dashboard';
-
 import { toast } from "react-toastify";
 
 toast.configure();
@@ -20,7 +19,7 @@ export const AppRouter = () => {
 
     const checkAuthenticated = async () => {
         try {
-            const res = await fetch("/auth/verify", {
+            const res = await fetch("/auth/jwt/verify", {
                 method: "POST",
                 headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }
             });

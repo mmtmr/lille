@@ -3,6 +3,7 @@ const router = express.Router();
 const cheerio = require("cheerio");
 const pool = require("../db");
 var rp = require("request-promise");
+const authorize = require("../middleware/authorize");
 
 router.get('/', async (req, res) => {
 
@@ -15,7 +16,7 @@ router.get('/', async (req, res) => {
         console.error(err.message);
     }
 });
-router.post('/:urlDate', (req, res) => {
+router.post('/:urlDate', authorize, (req, res) => {
     var table = [];
     var ce = [];
     var urlDate = req.params.urlDate;

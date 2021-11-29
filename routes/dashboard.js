@@ -6,7 +6,7 @@ require("dotenv").config();
 const databaseId = process.env.NOTION_DATABASE_ID
 
 //Query database
-router.get('/notion',async(req,res)=>{
+router.get('/notion', authorize,async(req,res)=>{
   try {
     const response = await notion.databases.query({
         database_id: databaseId,
@@ -46,7 +46,7 @@ router.get('/notion',async(req,res)=>{
 })
 
 //Query database
-router.put('/notion',async(req,res)=>{
+router.put('/notion', authorize,async(req,res)=>{
   try {
     const {id}=req.body;
     const response = await notion.pages.update({

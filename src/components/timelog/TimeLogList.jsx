@@ -21,7 +21,7 @@ export const TimeLogList = () => {
     useEffect(() => {
         const getTimeLog = async () => {
             try {
-                const response = await axios.get(`/api/timelog`);
+                const response = await axios.get(`/api/timelog`,{headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }});
                 const data = await response?.data;
                 setLog(data);
 
@@ -124,7 +124,7 @@ export const TimeLogList = () => {
                             const body = { tl_date, tl_standby_min, tl_real_min, tsk_id, st_ids };
                             const response = fetch("/api/timelog", {
                                 method: "POST",
-                                headers: { "Content-Type": "application/json" },
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                                 body: JSON.stringify(body)
                             });
                             setCreateLog(false);
@@ -145,7 +145,7 @@ export const TimeLogList = () => {
                             const body = { tl_date, tl_standby_min, tl_real_min, tsk_id, st_ids };
                             const response = fetch(`/api/timelog/${editLog}`, {
                                 method: "PUT",
-                                headers: { "Content-Type": "application/json" },
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                                 body: JSON.stringify(body)
                             }).then(setEditLog(false));
                         } catch (err) {
@@ -164,7 +164,7 @@ export const TimeLogList = () => {
                         const body = { deleteLog };
                         const response = fetch(`/api/timelog/${deleteLog}`, {
                             method: "DELETE",
-                            headers: { "Content-Type": "application/json" },
+                            headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                             body: JSON.stringify(body)
                         });
                         setDeleteLog(null);

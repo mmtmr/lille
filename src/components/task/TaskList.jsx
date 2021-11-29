@@ -28,7 +28,7 @@ export const TaskList = () => {
     useEffect(() => {
         const getTimeLog = async () => {
             try {
-                const response = await axios.get(`/api/task`);
+                const response = await axios.get(`/api/task`,{headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }});
                 const data = await response?.data;
                 setTask(data);
 
@@ -156,7 +156,7 @@ export const TaskList = () => {
                             const body = { tsk_name, tsk_est_min, tsk_todo };
                             const response = fetch("/api/task", {
                                 method: "POST",
-                                headers: { "Content-Type": "application/json" },
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                                 body: JSON.stringify(body)
                             });
                             setCreateTask(null);
@@ -177,7 +177,7 @@ export const TaskList = () => {
                             const body = { tsk_name, tsk_est_min, tsk_todo };
                             const response = fetch(`/api/task/${tsk_id}`, {
                                 method: "PUT",
-                                headers: { "Content-Type": "application/json" },
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                                 body: JSON.stringify(body)
                             });
                             setEditTask(null);
@@ -198,7 +198,7 @@ export const TaskList = () => {
                         const body = { tsk_id };
                         const response = fetch(`/api/task/${tsk_id}`, {
                             method: "DELETE",
-                            headers: { "Content-Type": "application/json" },
+                            headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                             body: JSON.stringify(body)
                         });
                         setDeleteTask(null);
@@ -216,7 +216,7 @@ export const TaskList = () => {
                             const body = { st_name };
                             const response = fetch(`/api/task/${tsk_id}`, {
                                 method: "POST",
-                                headers: { "Content-Type": "application/json" },
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                                 body: JSON.stringify(body)
                             });
                             setCreateSubTask(null);
@@ -237,7 +237,7 @@ export const TaskList = () => {
                         const body = { st_name };
                         const response = fetch(`/api/task/${tsk_id}/${st_id}`, {
                             method: "PUT",
-                            headers: { "Content-Type": "application/json" },
+                            headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                             body: JSON.stringify(body)
                         });
                         setEditSubTask(null);
@@ -255,7 +255,7 @@ export const TaskList = () => {
                         const body = { st_id };
                         const response = fetch(`/api/task/${tsk_id}/${st_id}`, {
                             method: "DELETE",
-                            headers: { "Content-Type": "application/json" },
+                            headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                             body: JSON.stringify(body)
                         });
                         setDeleteSubTask(null);

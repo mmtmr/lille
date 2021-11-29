@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const authorize = require("../middleware/authorize");
+
 //Create a timelog
-router.post('/', async (req, res) => {
+router.post('/', authorize, async (req, res) => {
     try {
         const { tl_date, tl_standby_min, tl_real_min, tsk_id, st_ids } = req.body;
         const newTimeLog = await pool.query(
@@ -24,7 +26,7 @@ router.post('/', async (req, res) => {
 });
 
 //Get all timelog and their subtask
-router.get('/', async (req, res) => {
+router.get('/', authorize, async (req, res) => {
     try {
         const tl_st = await pool.query("SELECT * FROM tl_st_relation_t;");
         const tl_st_ids = tl_st.rows.map(tl_st => Object.values(tl_st));
@@ -70,7 +72,7 @@ router.get('/', async (req, res) => {
 });
 
 //Get a timelog and its task and subtask
-router.get('/:tl_id', async (req, res) => {
+router.get('/:tl_id', authorize, async (req, res) => {
     try {
         const { tl_id } = req.params;
         const timelog = await pool.query("SELECT * FROM time_log_t WHERE tl_id = $1;", [tl_id]);
@@ -109,7 +111,7 @@ router.get('/:tl_id', async (req, res) => {
 });
 
 //Update a timelog
-router.put('/:tl_id', async (req, res) => {
+router.put('/:tl_id', authorize, async (req, res) => {
     try {
         const { tl_id } = req.params;
         const { tl_date, tl_standby_min, tl_real_min, tsk_id, st_ids } = req.body;
@@ -130,7 +132,7 @@ router.put('/:tl_id', async (req, res) => {
 });
 
 //Delete a timelog
-router.delete('/:tl_id', async (req, res) => {
+router.delete('/:tl_id', authorize, async (req, res) => {
     try {
         const { tl_id } = req.params;
 

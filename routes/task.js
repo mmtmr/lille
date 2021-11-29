@@ -1,10 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db");
+const authorize = require("../middleware/authorize");
 
 //Task
 //Create a task
-router.post('/', async (req, res) => {
+router.post('/',authorize, async (req, res) => {
 
     try {
         const { tsk_name, tsk_est_min, tsk_todo } = req.body;
@@ -17,7 +18,7 @@ router.post('/', async (req, res) => {
     }
 });
 //Create a subtask
-router.post('/:tsk_id', async (req, res) => {
+router.post('/:tsk_id', authorize, async (req, res) => {
 
     try {
         const { tsk_id } = req.params;
@@ -32,7 +33,7 @@ router.post('/:tsk_id', async (req, res) => {
 });
 
 //Get all tasks and subtasks with their occurance rate
-router.get('/', async (req, res) => {
+router.get('/', authorize, async (req, res) => {
     try {
         const allTasks = await pool.query(
             "SELECT * FROM task_t;"
@@ -91,7 +92,7 @@ router.get('/', async (req, res) => {
 
 
 //Get a task and its subtasks
-router.get('/:tsk_id', async (req, res) => {
+router.get('/:tsk_id', authorize,async (req, res) => {
     try {
         const { tsk_id } = req.params;
         const task = await pool.query("SELECT * FROM task_t WHERE tsk_id = $1", [tsk_id]);
@@ -108,7 +109,7 @@ router.get('/:tsk_id', async (req, res) => {
     }
 });
 //Get a subtask
-router.get('/:tsk_id/:st_id', async (req, res) => {
+router.get('/:tsk_id/:st_id',authorize, async (req, res) => {
     try {
         const { tsk_id, st_id } = req.params;
         const subtask = await pool.query(
@@ -122,7 +123,7 @@ router.get('/:tsk_id/:st_id', async (req, res) => {
 })
 
 //Update a task
-router.put('/:tsk_id', async (req, res) => {
+router.put('/:tsk_id', authorize, async (req, res) => {
     try {
         
         const { tsk_id } = req.params;
@@ -136,7 +137,7 @@ router.put('/:tsk_id', async (req, res) => {
 });
 
 //Update a subtask
-router.put('/:tsk_id/:st_id', async (req, res) => {
+router.put('/:tsk_id/:st_id', authorize,async (req, res) => {
     try {
         const { tsk_id, st_id } = req.params;
         const { st_name } = req.body;
@@ -149,7 +150,7 @@ router.put('/:tsk_id/:st_id', async (req, res) => {
 });
 
 //Delete a task and its subtasks
-router.delete('/:tsk_id', async (req, res) => {
+router.delete('/:tsk_id', authorize,async (req, res) => {
     try {
         const { tsk_id } = req.params;
         // const deleteSubtask = await pool.query(
@@ -163,7 +164,7 @@ router.delete('/:tsk_id', async (req, res) => {
     }
 });
 //Delete a subtask
-router.delete('/:tsk_id/:st_id', async (req, res) => {
+router.delete('/:tsk_id/:st_id', authorize, async (req, res) => {
     try {
         const { tsk_id, st_id } = req.params;
         const deleteSubtask = await pool.query("DELETE FROM subtask_t WHERE st_id=$1;", [st_id]);
