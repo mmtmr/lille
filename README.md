@@ -10,7 +10,7 @@ This a personal task management system that is customized to suit the developer'
 - [ ]Theme for calendar
 - [ ]Dashboard
 - [ ]Visitors
-- [ ]Notion.API implementation
+- [x]Notion.API implementation
 - [x]Spaced repetition
 - [ ]Server to host Anki
 - [ ]Separate calendar (with json config) and the pure calendar into two projects
