@@ -85,7 +85,6 @@ export const Dashboard = () => {
 
               plugins={[listPlugin, googleCalendarPlugin, iCalendarPlugin]}
               initialView='listDay'
-              height="30vh"
               headerToolbar={false}
               googleCalendarApiKey={'AIzaSyC3WkY3kzoBBWgYb_7dIrLe-JaBbN92nRM'}
               eventDidMount={generateTooltip}
