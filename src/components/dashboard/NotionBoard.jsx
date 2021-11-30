@@ -102,7 +102,7 @@ export const NotionBoard = () => {
         const title = row.properties.Subject.select.name ? row.properties.Subject.select.name + ' - ' + row.properties.Name.title[0].plain_text : row.properties.Name.title[0].plain_text;
         return (
             <>
-                <Button variant="success" onClick={() => { setConfirm([title,cell])}}><FontAwesomeIcon icon={faCheck} /></Button>
+                <Button variant="success" onClick={() => { setConfirm([title, cell]) }}><FontAwesomeIcon icon={faCheck} /></Button>
                 <Button variant="info" onClick={() => { setSchedule(title) }}><FontAwesomeIcon icon={faClock} /></Button>
             </>
         )
@@ -124,27 +124,27 @@ export const NotionBoard = () => {
             dataField: "properties.Name.title[0].plain_text",
             text: "Title",
             sort: true,
-            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))' }
+            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))', width: "40%" }
         },
         {
             dataField: "properties.Subject.select.name",
             text: "Subject",
             sort: true,
-            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))' }
+            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))', width: "20%" }
 
         },
         {
             dataField: "properties.Status.select.name",
             text: "Status",
             sort: true,
-            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))' }
+            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))', width:"20%" }
 
         },
         {
             dataField: "id",
             text: "",
             formatter: buttonFormatter,
-            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))' }
+            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))', width: "20%" }
 
         }
     ];
