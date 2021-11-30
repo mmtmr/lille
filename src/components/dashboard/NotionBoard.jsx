@@ -100,7 +100,7 @@ export const NotionBoard = ({refetchCal}) => {
         }
     }
     const buttonFormatter = (cell, row, rowIndex) => {
-        const title = row.properties.Subject.select.name ? row.properties.Subject.select.name + ' - ' + row.properties.Name.title[0].plain_text : row.properties.Name.title[0].plain_text;
+        const title = row.properties.Subject.select ? row.properties.Subject.select.name + ' - ' + row.properties.Name.title[0].plain_text : row.properties.Name.title[0].plain_text;
         return (
             <>
                 <Button variant="success" onClick={() => { setConfirm([title, cell]) }}><FontAwesomeIcon icon={faCheck} /></Button>
