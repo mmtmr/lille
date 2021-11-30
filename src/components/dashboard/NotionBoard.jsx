@@ -10,8 +10,7 @@ import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { NewEventModal } from './NewEventModal';
 import { ConfirmationModal } from './ConfirmationModal';
 import { GoogleAuth } from '../access/GoogleAuth'
-export const NotionBoard = () => {
-
+export const NotionBoard = ({refetchCal}) => {
     const [list, setList] = useState([]);
     const [schedule, setSchedule] = useState();
     const [confirm, setConfirm] = useState();
@@ -42,6 +41,8 @@ export const NotionBoard = () => {
                 if (status === 200) {
                     setEvent();
                     toast.success("Event successfully added!")
+                    refetchCal();
+                   
                 }
 
             } catch (err) {

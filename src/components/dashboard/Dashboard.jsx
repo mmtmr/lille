@@ -1,20 +1,19 @@
-import React, { useEffect, useState } from "react";
-import Card from 'react-bootstrap/Card'
+import React, { useRef } from "react";
 import FullCalendar from '@fullcalendar/react'
 import listPlugin from '@fullcalendar/list'
 import googleCalendarPlugin from '@fullcalendar/google-calendar'
 import iCalendarPlugin from '@fullcalendar/icalendar'
-import { toast } from "react-toastify";
 import { Tooltip } from "bootstrap/dist/js/bootstrap.esm.min.js"
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import CustomViewPlugin from './CustomView';
-import {NotionBoard} from './NotionBoard';
+import { NotionBoard } from './NotionBoard';
 
 export const Dashboard = () => {
 
-
+  const calBoardRef = useRef();
+  const calCustomRef = useRef();
 
   const generateTooltip = (info) => {
     try {
@@ -34,10 +33,10 @@ export const Dashboard = () => {
         trigger: 'hover',
         container: 'body'
       });
-      
-      info.el.style.backgroundColor='rgba(26, 9, 51,0.3)'
-      if(document.getElementsByClassName('fc-list-day')[0]) document.getElementsByClassName('fc-list-day')[0].classList.remove('fc-list-day');
-      if(document.getElementsByClassName('fc-list')[0]) document.getElementsByClassName('fc-list')[0].classList.remove('fc-list');
+
+      info.el.style.backgroundColor = 'rgba(26, 9, 51,0.3)'
+      if (document.getElementsByClassName('fc-list-day')[0]) document.getElementsByClassName('fc-list-day')[0].classList.remove('fc-list-day');
+      if (document.getElementsByClassName('fc-list')[0]) document.getElementsByClassName('fc-list')[0].classList.remove('fc-list');
     } catch (err) { console.log(err); }
   }
 
@@ -47,12 +46,13 @@ export const Dashboard = () => {
       <Container>
         <Row className="height-50">
           <FullCalendar
+            ref={calCustomRef}
             plugins={[CustomViewPlugin, googleCalendarPlugin, iCalendarPlugin]}
             initialView='custom'
             headerToolbar={false}
             googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
             eventSources={[
-              { googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink' },
+              { googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink', id:'notion' },
               { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
               { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
               { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
@@ -82,14 +82,14 @@ export const Dashboard = () => {
         <Row>
           <Col>
             <FullCalendar
-
+              ref={calBoardRef}
               plugins={[listPlugin, googleCalendarPlugin, iCalendarPlugin]}
               initialView='listDay'
               headerToolbar={false}
               googleCalendarApiKey={'AIzaSyC3WkY3kzoBBWgYb_7dIrLe-JaBbN92nRM'}
               eventDidMount={generateTooltip}
               eventSources={[
-                { googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink' },
+                { googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink', id: 'notion' },
                 { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
                 { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
                 { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
@@ -118,8 +118,17 @@ export const Dashboard = () => {
             />
           </Col>
           <Col>
-          <NotionBoard />
+            <NotionBoard refetchCal={() => {
+              let calBoardApi = calBoardRef.current.getApi();
+              let notionCalBoard = calBoardApi.getEventSourceById('notion')
+              notionCalBoard.refetch();
+
+              let calCustomApi = calCustomRef.current.getApi();
+              let notionCalCustom = calCustomApi.getEventSourceById('notion')
+              notionCalCustom.refetch();
+            }} />
           </Col>
+
         </Row>
       </Container>
 
