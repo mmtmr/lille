@@ -164,9 +164,10 @@ const useTimetable = () => {
             const controller = new AbortController();
             const id = setTimeout(() => controller.abort(), timeout);
 
-            const response = await axios.post(resource, {
+            const response = await axios.post(resource,null, {
                 ...options,
-                signal: controller.signal
+                signal: controller.signal,
+                headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken } 
             });
             clearTimeout(id);
             //console.log("whatever");
@@ -178,7 +179,7 @@ const useTimetable = () => {
         const result = await Promise.allSettled(urls.map(u => fetchWithTimeout(u, { timeout: 6000 })));
         const weeks = await resultFilter(result); // all fulfilled results
         //const rejected = await resultFilter(result, true); // all rejected results
-        const data = await Promise.all(await weeks.map(week => axios.post(week)));
+        const data = await Promise.all(await weeks.map(week => axios.post(week,null, { headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken } })));
         return data;
     }
     generateTimetable();
