@@ -31,7 +31,7 @@ const CustomView = (props) => {
         setUpTimer(countdown);
         if(countdown<=1800000&&countdown>1790000){
           keepPlaying();
-        }else if(countdown<=60000){
+        }else if(countdown<=60000&&countdown>50000){
           keepPlaying();
         }
       }
