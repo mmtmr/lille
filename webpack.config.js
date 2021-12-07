@@ -30,7 +30,7 @@ module.exports = {
             }]
         },
         {
-            test: /\.(ico|jpg)?$/,
+            test: /\.(ico|jpg|mp3)?$/,
             use: [{
                 loader: 'file-loader',
                 options: {
