@@ -8,7 +8,6 @@ import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import googleCalendarPlugin from '@fullcalendar/google-calendar'
 import iCalendarPlugin from '@fullcalendar/icalendar'
-import axios from 'axios'
 import "@fortawesome/fontawesome-free/css/all.css"
 import { Tooltip } from "bootstrap/dist/js/bootstrap.esm.min.js"
 
@@ -17,9 +16,9 @@ export const Calendar = () => {
     const [currentEvents, setCurrentEvents] = useState([]);
 
 
-    useEffect(() => {
-        useTimetable();
-    }, [])
+    // useEffect(() => {
+    //     useTimetable();
+    // }, [])
 
     const handleEventClick = (clickInfo) => {
         clickInfo.jsEvent.preventDefault();
@@ -131,60 +130,60 @@ const calculateWeekNumber = (date) => {
 }
 
 
-const useTimetable = () => {
-    function generateURL() {
-        const d = new Date(2021, 5, 14);
-        const oneMonthFromToday = new Date().setDate(new Date().getDate() + 28);
-        const today = new Date();
-        var weeks = [];
-        for (let i = d; i <= oneMonthFromToday; i.setDate(i.getDate() + 7)) {
-            var monday = i;
-            //var monday = new Date(2021, 5, 14);
-            //monday.setDate(monday.getDate() + 7);
-            let day = monday.getDay();
-            if (day !== 1)
-                monday.setHours(-24 * (day - 1));
-            monday.toISOString().slice(0, 10);
-            var urlMonth = String(monday.getMonth() + 1).padStart(2, '0');
-            var urlDay = String(monday.getDate()).padStart(2, '0');
-            var urlYear = monday.getFullYear();
-            var urlDate = urlYear + '-' + urlMonth + '-' + urlDay;
-            var url = "";
-            url = '/api/apuCourse/' + urlDate;
-            weeks.push(url);
-        }
-        return weeks;
-    }
+// const useTimetable = () => {
+//     function generateURL() {
+//         const d = new Date(2021, 5, 14);
+//         const oneMonthFromToday = new Date().setDate(new Date().getDate() + 28);
+//         const today = new Date();
+//         var weeks = [];
+//         for (let i = d; i <= oneMonthFromToday; i.setDate(i.getDate() + 7)) {
+//             var monday = i;
+//             //var monday = new Date(2021, 5, 14);
+//             //monday.setDate(monday.getDate() + 7);
+//             let day = monday.getDay();
+//             if (day !== 1)
+//                 monday.setHours(-24 * (day - 1));
+//             monday.toISOString().slice(0, 10);
+//             var urlMonth = String(monday.getMonth() + 1).padStart(2, '0');
+//             var urlDay = String(monday.getDate()).padStart(2, '0');
+//             var urlYear = monday.getFullYear();
+//             var urlDate = urlYear + '-' + urlMonth + '-' + urlDay;
+//             var url = "";
+//             url = '/api/apuCourse/' + urlDate;
+//             weeks.push(url);
+//         }
+//         return weeks;
+//     }
 
-    //TODA save all events in json or php whatever in the server
-    async function generateTimetable() {
-        async function fetchWithTimeout(resource, options) {
-            const { timeout = 6000 } = options;
+//     //TODA save all events in json or php whatever in the server
+//     async function generateTimetable() {
+//         async function fetchWithTimeout(resource, options) {
+//             const { timeout = 6000 } = options;
 
-            const controller = new AbortController();
-            const id = setTimeout(() => controller.abort(), timeout);
+//             const controller = new AbortController();
+//             const id = setTimeout(() => controller.abort(), timeout);
 
-            const response = await axios.post(resource,null, {
-                ...options,
-                signal: controller.signal,
-                headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken } 
-            });
-            clearTimeout(id);
-            //console.log("whatever");
-            return response;
-        }
-        const urls = generateURL();
+//             const response = await axios.post(resource,null, {
+//                 ...options,
+//                 signal: controller.signal,
+//                 headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken } 
+//             });
+//             clearTimeout(id);
+//             //console.log("whatever");
+//             return response;
+//         }
+//         const urls = generateURL();
 
-        const resultFilter = (result, error) => result.filter(i => i.status === (!error ? 'fulfilled' : 'rejected')).map(i => (!error ? i.value.config.url : i.reason));
-        const result = await Promise.allSettled(urls.map(u => fetchWithTimeout(u, { timeout: 6000 })));
-        const weeks = await resultFilter(result); // all fulfilled results
-        //const rejected = await resultFilter(result, true); // all rejected results
-        const data = await Promise.all(await weeks.map(week => axios.post(week,null, { headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken } })));
-        return data;
-    }
-    generateTimetable();
-    console.log("success generating timetable");
-}
+//         const resultFilter = (result, error) => result.filter(i => i.status === (!error ? 'fulfilled' : 'rejected')).map(i => (!error ? i.value.config.url : i.reason));
+//         const result = await Promise.allSettled(urls.map(u => fetchWithTimeout(u, { timeout: 6000 })));
+//         const weeks = await resultFilter(result); // all fulfilled results
+//         //const rejected = await resultFilter(result, true); // all rejected results
+//         const data = await Promise.all(await weeks.map(week => axios.post(week,null, { headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken } })));
+//         return data;
+//     }
+//     generateTimetable();
+//     console.log("success generating timetable");
+// }
 
 
 const renderEventContent = (eventInfo) => {
