@@ -20,7 +20,7 @@ const CustomView = (props) => {
       const onEvents=segs.filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))<=0 }).sort((a,b)=>b.range.end.getTime()-a.range.end.getTime());
       setOngoingEvent(onEvents);
 
-      const upEvents=segs.filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))>0 }).sort((a,b)=>b.range.start.getTime()-a.range.start.getTime());
+      const upEvents=segs.filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))>0 }).sort((a,b)=>a.range.start.getTime()-b.range.start.getTime());
       setUpcomingEvent(upEvents);
 
       if(onEvents.length>0){
