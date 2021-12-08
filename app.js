@@ -10,7 +10,7 @@ app.use(session({
   resave: false,
   saveUninitialized: true,
   secret: 'SECRET',
-  cookie:{maxAge: null}
+  cookie:{maxAge: 604800000 }//one week
 }));
 
 app.use(express.json());
