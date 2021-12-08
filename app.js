@@ -9,7 +9,8 @@ const session = require('express-session');
 app.use(session({
   resave: false,
   saveUninitialized: true,
-  secret: 'SECRET'
+  secret: 'SECRET',
+  cookie:{maxAge: null}
 }));
 
 app.use(express.json());
