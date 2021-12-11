@@ -17,10 +17,11 @@ const CustomView = (props) => {
     // if(ongoingEvent.length===0&&upcomingEvent.length===0) {document.body.style.backgroundImage = `url(${bedroom})`;}
     document.body.style.backgroundImage = `url(${bedroom})`;
     const interval = setInterval(() => {
-      const onEvents=segs.filter(({allDay})=>{return !allDay}).filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))<=0 }).sort((a,b)=>b.range.end.getTime()-a.range.end.getTime());
+      console.log(segs);
+      const onEvents=segs.filter(({def})=>{return !def.allDay}).filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))<=0 }).sort((a,b)=>b.range.end.getTime()-a.range.end.getTime());
       setOngoingEvent(onEvents);
 
-      const upEvents=segs.filter(({allDay})=>{return !allDay}).filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))>0 }).sort((a,b)=>a.range.start.getTime()-b.range.start.getTime());
+      const upEvents=segs.filter(({def})=>{return !def.allDay}).filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))>0 }).sort((a,b)=>a.range.start.getTime()-b.range.start.getTime());
       setUpcomingEvent(upEvents);
 
       if(onEvents.length>0){
