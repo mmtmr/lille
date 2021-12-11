@@ -6,7 +6,7 @@ import { useAudio } from '../../hooks/useAudio';
 
 const CustomView = (props) => {
 
-  const segs = sliceEvents(props, false); // allDay=false
+  const segs = sliceEvents(props, true); // allDay=true
   const [ongoingEvent,setOngoingEvent]=useState([]);
   const [upcomingEvent,setUpcomingEvent]=useState([]);
   const [onTimer,setOnTimer]=useState(0);
@@ -17,10 +17,10 @@ const CustomView = (props) => {
     // if(ongoingEvent.length===0&&upcomingEvent.length===0) {document.body.style.backgroundImage = `url(${bedroom})`;}
     document.body.style.backgroundImage = `url(${bedroom})`;
     const interval = setInterval(() => {
-      const onEvents=segs.filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))<=0 }).sort((a,b)=>b.range.end.getTime()-a.range.end.getTime());
+      const onEvents=segs.filter(({allDay})=>{return !allDay}).filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))<=0 }).sort((a,b)=>b.range.end.getTime()-a.range.end.getTime());
       setOngoingEvent(onEvents);
 
-      const upEvents=segs.filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))>0 }).sort((a,b)=>a.range.start.getTime()-b.range.start.getTime());
+      const upEvents=segs.filter(({allDay})=>{return !allDay}).filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))>0 }).sort((a,b)=>a.range.start.getTime()-b.range.start.getTime());
       setUpcomingEvent(upEvents);
 
       if(onEvents.length>0){
