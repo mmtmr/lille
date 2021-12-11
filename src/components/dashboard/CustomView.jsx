@@ -6,7 +6,7 @@ import { useAudio } from '../../hooks/useAudio';
 
 const CustomView = (props) => {
 
-  const segs = sliceEvents(props, true); // allDay=true
+  const segs = sliceEvents(props, false); // allDay=false
   const [ongoingEvent,setOngoingEvent]=useState([]);
   const [upcomingEvent,setUpcomingEvent]=useState([]);
   const [onTimer,setOnTimer]=useState(0);
