@@ -18,7 +18,7 @@ router.post('/', authorize, async (req, res) => {
             )
         }
         const newTimeLogSubtask = await st_ids.map(st_id => addSubtaskToTimeLog(tl_id, st_id));
-        res.send('/timelog.html');
+        res.sendStatus(200);
     } catch (err) {
         console.error(err.message);
         res.sendStatus(500);
@@ -124,7 +124,7 @@ router.put('/:tl_id', authorize, async (req, res) => {
             )
         }
         const newTimeLogSubtask = await st_ids.map(st_id => addSubtaskToTimeLog(tl_id, st_id));
-        res.send('/timelog.html');
+        res.sendStatus(200);
     } catch (err) {
         console.log(err.message);
         res.sendStatus(500);
