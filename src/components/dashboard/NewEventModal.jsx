@@ -85,7 +85,7 @@ export const NewEventModal = ({ onSave, onClose, schedule }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     {
-                        schedule.id &&
+                        subject &&
                         <Button
                             variant="danger"
                             onClick={() => { setDel(schedule) }}

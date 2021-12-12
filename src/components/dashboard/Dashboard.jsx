@@ -33,30 +33,39 @@ export const Dashboard = () => {
     }
 
   }
-  // const generateTooltip = (info) => {
-  //   try {
+  const generateTooltip = (info) => {
+    try {
 
-  //     const generateTooltipTitle = (info) => {
-  //       if (info.event.extendedProps.location && info.event.extendedProps.lecturer) {
-  //         return '@' + String(info.event.extendedProps.location) + ' by ' + String(info.event.extendedProps.lecturer)
+      const generateTooltipTitle = (info) => {
+        if (info.event.extendedProps.location && info.event.extendedProps.lecturer) {
+          return '@' + String(info.event.extendedProps.location) + ' by ' + String(info.event.extendedProps.lecturer)
 
-  //       } else if (info.event.extendedProps.location) {
-  //         return '@' + String(info.event.extendedProps.location)
-  //       } else { return String(info.event.title); }
-  //     }
-  //     var title = String(generateTooltipTitle(info));
-  //     var tooltip = new Tooltip(info.el, {
-  //       title: title,
-  //       placement: 'top',
-  //       trigger: 'hover',
-  //       container: 'body'
-  //     });
+        } else if (info.event.extendedProps.location) {
+          return '@' + String(info.event.extendedProps.location)
+        } else { return String(info.event.title); }
+      }
+      var title = String(generateTooltipTitle(info));
+      var tooltip = new Tooltip(info.el, {
+        title: title,
+        placement: 'top',
+        trigger: 'hover',
+        container: 'body'
+      });
 
-  //     info.el.style.backgroundColor = 'rgba(26, 9, 51,0.3)'
-  //     if (document.getElementsByClassName('fc-list-day')[0]) document.getElementsByClassName('fc-list-day')[0].classList.remove('fc-list-day');
-  //     if (document.getElementsByClassName('fc-list')[0]) document.getElementsByClassName('fc-list')[0].classList.remove('fc-list');
-  //   } catch (err) { console.log(err); }
-  // }
+      info.el.style.backgroundColor = 'rgba(26, 9, 51,0.3)'
+      if (document.getElementsByClassName('fc-list-day')[0]) document.getElementsByClassName('fc-list-day')[0].classList.remove('fc-list-day');
+      if (document.getElementsByClassName('fc-list')[0]) document.getElementsByClassName('fc-list')[0].classList.remove('fc-list');
+    } catch (err) { console.log(err); }
+  }
+
+  const removeTooltip = (info) => {
+    try {
+        const tooltips=document.getElementsByClassName('tooltip');
+        while(tooltips.length > 0){
+            tooltips[0].parentNode.removeChild(tooltips[0]);
+        }
+    } catch (err) { console.log(err); }
+}
 
 
   return (
@@ -116,7 +125,8 @@ export const Dashboard = () => {
               initialView='listDay'
               headerToolbar={false}
               googleCalendarApiKey={'AIzaSyC3WkY3kzoBBWgYb_7dIrLe-JaBbN92nRM'}
-              // eventDidMount={generateTooltip}
+              eventDidMount={generateTooltip}
+              eventWillUnmount={removeTooltip}
               eventClick={handleEventClick}
               eventSources={[
                 //{ googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink', id: 'notion' },
@@ -186,14 +196,6 @@ export const Dashboard = () => {
               const status = await response?.status;
               if (status === 200) {
                 toast.success("Event successfully modified!")
-
-                let calBoardApi = calBoardRef.current.getApi();
-                let notionCalBoard = calBoardApi.getEventSourceById('notion')
-                notionCalBoard.refetch();
-
-                let calCustomApi = calCustomRef.current.getApi();
-                let notionCalCustom = calCustomApi.getEventSourceById('notion')
-                notionCalCustom.refetch();
               }
               setEvent(null);
             } catch (err) {
@@ -219,15 +221,6 @@ export const Dashboard = () => {
               const status = await response?.status;
               if (status === 200) {
                 toast.success("Class event successfully modified!")
-                
-                let calBoardApi = calBoardRef.current.getApi();
-                let notionCalBoard = calBoardApi.getEventSourceById('notion')
-                notionCalBoard.refetch();
-
-                let calCustomApi = calCustomRef.current.getApi();
-                let notionCalCustom = calCustomApi.getEventSourceById('notion')
-                notionCalCustom.refetch();
-
               }
               setEvent(null);
             } catch (err) {

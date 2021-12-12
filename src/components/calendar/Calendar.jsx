@@ -10,8 +10,10 @@ import googleCalendarPlugin from '@fullcalendar/google-calendar'
 import iCalendarPlugin from '@fullcalendar/icalendar'
 import "@fortawesome/fontawesome-free/css/all.css"
 import { Tooltip } from "bootstrap/dist/js/bootstrap.esm.min.js"
+import { NewEventModal } from '../dashboard/NewEventModal';
 
 export const Calendar = () => {
+    const [event, setEvent] = useState();
     const [weekendVisible, setWeekendVisible] = useState(true);
     const [currentEvents, setCurrentEvents] = useState([]);
 
@@ -22,10 +24,17 @@ export const Calendar = () => {
 
     const handleEventClick = (clickInfo) => {
         clickInfo.jsEvent.preventDefault();
+        console.log(clickInfo.event);
         if (clickInfo.event.url) {
             if (confirm(`Are you sure you want to open new tab for the event '${clickInfo.event.title}'?`)) {
                 window.open(clickInfo.event.url);
             }
+        } else if (clickInfo.event.extendedProps.lecturer) {
+            var schedule = { id: clickInfo.event._def.publicId, location: clickInfo.event.extendedProps.location, description: clickInfo.event.extendedProps.description, start: new Date(clickInfo.event._instance.range.start.getTime() + new Date().getTimezoneOffset() * 60000), end: new Date(clickInfo.event._instance.range.end.getTime() + new Date().getTimezoneOffset() * 60000) }
+            setEvent(schedule);
+        } else if (clickInfo.event.extendedProps.subject) {
+            var schedule = { id: clickInfo.event._def.publicId, title: clickInfo.event.title, subject: clickInfo.event.extendedProps.subject, description: clickInfo.event.extendedProps.description, start: new Date(clickInfo.event._instance.range.start.getTime() + new Date().getTimezoneOffset() * 60000), end: new Date(clickInfo.event._instance.range.end.getTime() + new Date().getTimezoneOffset() * 60000) }
+            setEvent(schedule);
         }
 
     }
@@ -50,69 +59,141 @@ export const Calendar = () => {
         } catch (err) { console.log(err); }
     }
 
+    const removeTooltip = (info) => {
+        try {
+            const tooltips=document.getElementsByClassName('tooltip');
+            while(tooltips.length > 0){
+                tooltips[0].parentNode.removeChild(tooltips[0]);
+            }
+        } catch (err) { console.log(err); }
+    }
+
 
     return (
-        <FullCalendar
+        <>
+            <FullCalendar
 
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, googleCalendarPlugin, iCalendarPlugin]}
-            headerToolbar={{
-                left: 'title',
-                center: 'dayGridMonth,timeGridWeek,timeGridDay',
-                right: 'prev,next,today'
-            }}
-            initialView='dayGridMonth'
-            buttonText={{
-                listYear: 'year',
-                listMonth: 'month',
-                listWeek: 'week',
-                listDay: 'day'
-            }}
-            footerToolbar={{
-                center: 'listYear,listMonth,listWeek,listDay'
-            }}
-            nowIndicator={true}
-            firstDay={1}
-            selectable={true}
-            selectMirror={true}
-            //select={this.handleDateSelect}
-            eventClick={handleEventClick}
-            //eventContent={renderEventContent}
-            weekNumbers={true}
-            weekNumberCalculation={calculateWeekNumber}
-            googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
-            eventContent={renderEventContent}
-            eventDidMount={generateTooltip}
-            eventSources={[
-                { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
-                { googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink' },
-                { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
-                { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
-                //{ googleCalendarId: '13h4uict96okp7hnmnq0m28fisn8k15c@import.calendar.google.com', color: 'violet', textColor: 'blue' }, //moodle assignment submission deadline
-                {
-                    url: '/api/apuCourse',
-                    method: 'GET',
-                    beforeSend: function (xhr) {
-                        var headers = [{ "Content-Type": "application/json" }, { "jwt_token": localStorage.token }, { "rt_token": localStorage.refreshToken }];
-                        for (var i in headers) xhr.setRequestHeader(i, headers[i]);
+                plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, listPlugin, googleCalendarPlugin, iCalendarPlugin]}
+                headerToolbar={{
+                    left: 'title',
+                    center: 'dayGridMonth,timeGridWeek,timeGridDay',
+                    right: 'prev,next,today'
+                }}
+                initialView='dayGridMonth'
+                buttonText={{
+                    listYear: 'year',
+                    listMonth: 'month',
+                    listWeek: 'week',
+                    listDay: 'day'
+                }}
+                footerToolbar={{
+                    center: 'listYear,listMonth,listWeek,listDay'
+                }}
+                nowIndicator={true}
+                firstDay={1}
+                selectable={true}
+                selectMirror={true}
+                //select={this.handleDateSelect}
+                eventClick={handleEventClick}
+                //eventContent={renderEventContent}
+                weekNumbers={true}
+                weekNumberCalculation={calculateWeekNumber}
+                googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
+                eventContent={renderEventContent}
+                eventDidMount={generateTooltip}
+                eventWillUnmount={removeTooltip}
+                eventSources={[
+                    { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
+                    //{ googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink' },
+                    { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
+                    { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
+                    //{ googleCalendarId: '13h4uict96okp7hnmnq0m28fisn8k15c@import.calendar.google.com', color: 'violet', textColor: 'blue' }, //moodle assignment submission deadline
+                    {
+                        url: '/api/apuCourse',
+                        method: 'GET',
+                        beforeSend: function (xhr) {
+                            var headers = [{ "Content-Type": "application/json" }, { "jwt_token": localStorage.token }, { "rt_token": localStorage.refreshToken }];
+                            for (var i in headers) xhr.setRequestHeader(i, headers[i]);
+                        },
+                        headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                        failure: function () {
+                            alert('there was an error while fetching events!');
+                        },
+                        color: 'mediumseagreen',   // a non-ajax option
                     },
-                    headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
-                    failure: function () {
-                        alert('there was an error while fetching events!');
+                    {
+                        url: '/api/notionLog',
+                        method: 'GET',
+                        failure: function () {
+                            alert('there was an error while fetching events!');
+                        },
+                        color: 'red', textColor: 'pink', id: 'notion',
+                        extraParams: {
+                            headers: [{ jwt_token: localStorage.token, rt_token: localStorage.refreshToken }]
+                        },
                     },
-                    color: 'mediumseagreen',   // a non-ajax option
-                },
-                {
-                    url: 'https://stormy-bastion-22629.herokuapp.com/https://lms2.apiit.edu.my/calendar/export_execute.php?userid=40338&authtoken=493c4503582bbf37a4df8ae70d9c07bd27d8d99e&preset_what=all&preset_time=recentupcoming',
-                    format: 'ics',
-                    color: 'violet',
-                    textColor: 'blue'
-                }
+                    {
+                        url: 'https://stormy-bastion-22629.herokuapp.com/https://lms2.apiit.edu.my/calendar/export_execute.php?userid=40338&authtoken=493c4503582bbf37a4df8ae70d9c07bd27d8d99e&preset_what=all&preset_time=recentupcoming',
+                        format: 'ics',
+                        color: 'violet',
+                        textColor: 'blue'
+                    }
 
-            ]}
+                ]}
 
 
-        />
+            />
+            {event && event.subject &&
+                < NewEventModal
+                    onClose={() => { setEvent(null); }}
+                    onSave={async (we_title, we_desc, we_subject, we_start, we_end) => {
+                        try {
+                            const body = { we_title, we_desc, we_subject, we_start, we_end };
+                            const response = fetch(`/api/notionLog/${event.id}`, {
+                                method: "PUT",
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                                body: JSON.stringify(body)
+                            });
+                            const status = await response?.status;
+                            if (status === 200) {
+                                toast.success("Event successfully modified!")
+                            }
+                            setEvent(null);
+                        } catch (err) {
+                            console.log(err.message);
+                        }
+                    }}
 
+                    schedule={event}
+                />
+            }
+            {event && event.location &&
+                < NewEventModal
+                    onClose={() => { setEvent(null); }}
+                    onSave={async (ce_start, ce_end, ce_desc, ce_location) => {
+                        try {
+                            const body = { ce_start, ce_end, ce_desc, ce_location };
+                            console.log(event);
+                            const response = fetch(`/api/apuCourse/${event.id}`, {
+                                method: "PUT",
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                                body: JSON.stringify(body)
+                            });
+                            const status = await response?.status;
+                            if (status === 200) {
+                                toast.success("Class event successfully modified!")
+
+                            }
+                            setEvent(null);
+                        } catch (err) {
+                            console.log(err.message);
+                        }
+                    }}
+
+                    schedule={event}
+                />
+            }
+        </>
 
     )
 }
