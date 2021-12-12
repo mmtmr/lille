@@ -17,7 +17,6 @@ const CustomView = (props) => {
     // if(ongoingEvent.length===0&&upcomingEvent.length===0) {document.body.style.backgroundImage = `url(${bedroom})`;}
     document.body.style.backgroundImage = `url(${bedroom})`;
     const interval = setInterval(() => {
-      console.log(segs);
       const onEvents=segs.filter(({def})=>{return !def.allDay}).filter(({range})=> {return (range.end.getTime()-(new Date().getTime()-range.end.getTimezoneOffset() * 60000))>=0&&(range.start.getTime()-(new Date().getTime()-range.start.getTimezoneOffset() * 60000))<=0 }).sort((a,b)=>b.range.end.getTime()-a.range.end.getTime());
       setOngoingEvent(onEvents);
 

@@ -179,7 +179,7 @@ router.get('/', (req, res) => {
 async function insertCE(ce) {
     try {
         await pool.query(
-            "INSERT INTO CLASS_EVENT_T (ce_type,ce_start,ce_end,ce_location,ce_week,cou_code) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT (ce_type,cou_code,ce_week) DO UPDATE SET ce_type=EXCLUDED.ce_type, ce_start=EXCLUDED.ce_start, ce_end=EXCLUDED.ce_end, ce_location=EXCLUDED.ce_location, ce_week=EXCLUDED.ce_week, cou_code=EXCLUDED.cou_code;",
+            "INSERT INTO CLASS_EVENT_T (ce_type,ce_start,ce_end,ce_location,ce_week,cou_code) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT (ce_type,cou_code,ce_week) WHERE NOT ce_replacement DO UPDATE SET ce_type=EXCLUDED.ce_type, ce_start=EXCLUDED.ce_start, ce_end=EXCLUDED.ce_end, ce_location=EXCLUDED.ce_location, ce_week=EXCLUDED.ce_week, cou_code=EXCLUDED.cou_code;",
             [ce.type, ce.start, ce.end, ce.location, ce.week, ce.cou_code]);
 
         //console.log(`Success ${ce.cou_code} ${ce.type} ${ce.week}`);
@@ -204,5 +204,20 @@ async function getCE() {
         console.error(err.message + ' on update ' + ce.cou_code + ce.type + ce.start + ce.end + ce.week);
     }
 }
+
+//Update a course event
+router.put('/:ce_id', authorize, async (req, res) => {
+    try {
+        const { ce_id } = req.params;
+        const { ce_start, ce_end, ce_desc, ce_location } = req.body;
+        const updateClassEvent = await pool.query(
+            "UPDATE CLASS_EVENT_T SET ce_start=$1,ce_end=$2,ce_desc=$3,ce_location=$4, ce_replacement=$5 WHERE ce_id=$6;", [ce_start, ce_end, ce_desc, ce_location, "f", ce_id]
+            );
+        res.sendStatus(200);
+        } catch (err) {
+        console.log(err.message);
+        res.sendStatus(500);
+    }
+});
 
 module.exports = router;

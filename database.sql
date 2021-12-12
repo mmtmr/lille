@@ -144,3 +144,14 @@ CREATE TABLE USER_T(
 
 -- INSERT INTO COURSE_T
 -- VALUES ('BIS','Business Intelligence Systems','MOHAMMAD NAMAZEE BIN MOHD NIZAM',2,2);
+
+CREATE TABLE WORK_EVENT_T(
+    we_id SERIAL PRIMARY KEY,
+    we_title VARCHAR(100) NULL,
+    we_start TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    we_end TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    we_desc VARCHAR(200),
+    we_subject VARCHAR(20) NOT NULL
+);
+
+--\copy WORK_EVENT_T(we_subject, we_title, we_start, we_end, we_desc) FROM 'D:\Users\NAME\Downloads\tmp-163932391256768.csv' DELIMITER ',' CSV HEADER;

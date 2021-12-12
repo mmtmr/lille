@@ -26,8 +26,7 @@ app.use("/api/dashboard", require("./routes/dashboard"));
 app.use("/api/apuCourse", require("./routes/apuCourse"));
 app.use("/api/task", require("./routes/task"));
 app.use("/api/timelog", require("./routes/timelog"));
-
-
+app.use("/api/notionLog", require("./routes/notionLog"));
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/dist/index.html'));

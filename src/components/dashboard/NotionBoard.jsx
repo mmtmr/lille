@@ -9,14 +9,13 @@ import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faClock } from "@fortawesome/free-solid-svg-icons";
 import { NewEventModal } from './NewEventModal';
 import { ConfirmationModal } from './ConfirmationModal';
-import { GoogleAuth } from '../access/GoogleAuth'
-export const NotionBoard = ({refetchCal}) => {
+//import { GoogleAuth } from '../access/GoogleAuth'
+export const NotionBoard = ({ refetchCal }) => {
     const [list, setList] = useState([]);
     const [schedule, setSchedule] = useState();
     const [confirm, setConfirm] = useState();
 
-    const [googleLogin, setGoogleLogin] = useState(false);
-    const [event, setEvent] = useState();
+    // const [googleLogin, setGoogleLogin] = useState(false);
 
     useEffect(() => {
         const getList = async () => {
@@ -31,49 +30,49 @@ export const NotionBoard = ({refetchCal}) => {
         };
         getList();
     }, []);
-    useEffect(() => {
-        const sendEvent = async () => {
-            try {
-                if (!event || googleLogin) return;
-                const response = await axios.post('/auth/google/event', event)
-                const status = await response?.status;
+    // useEffect(() => {
+    //     const sendEvent = async () => {
+    //         try {
+    //             if (!event || googleLogin) return;
+    //             const response = await axios.post('/auth/google/event', event)
+    //             const status = await response?.status;
 
-                if (status === 200) {
-                    setEvent();
-                    toast.success("Event successfully added!")
-                    refetchCal();
-                   
-                }
+    //             if (status === 200) {
+    //                 setEvent();
+    //                 toast.success("Event successfully added!")
+    //                 refetchCal();
 
-            } catch (err) {
-                console.log(err);
-                setGoogleLogin(true);
-            }
-        };
-        sendEvent();
-    }, [event]);
+    //             }
 
-    useEffect(() => {
-        const verifyGoogle = async () => {
-            try {
-                if (!schedule) return;
-                const response = await axios.get('/auth/google/verify')
-                const status = await response?.status;
-                console.log(response);
-                if (status === 200) {
-                    return;
-                }
-                else {
-                    setGoogleLogin(true);
-                }
+    //         } catch (err) {
+    //             console.log(err);
+    //             setGoogleLogin(true);
+    //         }
+    //     };
+    //     sendEvent();
+    // }, [event]);
 
-            } catch (err) {
-                console.log(err);
-                setGoogleLogin(true);
-            }
-        };
-        verifyGoogle();
-    }, [schedule]);
+    // useEffect(() => {
+    //     const verifyGoogle = async () => {
+    //         try {
+    //             if (!schedule) return;
+    //             const response = await axios.get('/auth/google/verify')
+    //             const status = await response?.status;
+    //             console.log(response);
+    //             if (status === 200) {
+    //                 return;
+    //             }
+    //             else {
+    //                 setGoogleLogin(true);
+    //             }
+
+    //         } catch (err) {
+    //             console.log(err);
+    //             setGoogleLogin(true);
+    //         }
+    //     };
+    //     verifyGoogle();
+    // }, [schedule]);
 
     const rowStyle = (row, rowIndex) => {
         if (!row.properties.Priority.select) return { color: 'rgb(27,162,246)', backgroundColor: 'rgba(26, 9, 51,0.3)' }
@@ -100,11 +99,12 @@ export const NotionBoard = ({refetchCal}) => {
         }
     }
     const buttonFormatter = (cell, row, rowIndex) => {
-        const title = row.properties.Subject.select ? row.properties.Subject.select.name + ' - ' + row.properties.Name.title[0].plain_text : row.properties.Name.title[0].plain_text;
+        const title = row.properties.Name.title[0].plain_text;
+        const subject = row.properties.Subject.select ? row.properties.Subject.select.name : "";
         return (
             <>
                 <Button variant="success" onClick={() => { setConfirm([title, cell]) }}><FontAwesomeIcon icon={faCheck} /></Button>
-                <Button variant="info" onClick={() => { setSchedule(title) }}><FontAwesomeIcon icon={faClock} /></Button>
+                <Button variant="info" onClick={() => { setSchedule({ title: title, subject: subject, desc: "", start: new Date(), end: new Date() }) }}><FontAwesomeIcon icon={faClock} /></Button>
             </>
         )
     }
@@ -138,7 +138,7 @@ export const NotionBoard = ({refetchCal}) => {
             dataField: "properties.Status.select.name",
             text: "Status",
             sort: true,
-            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))', width:"20%" }
+            headerStyle: { backgroundColor: 'var(--fc-neutral-bg-color, rgba(208, 208, 208, 0.3))', width: "20%" }
 
         },
         {
@@ -161,43 +161,35 @@ export const NotionBoard = ({refetchCal}) => {
             />
             {
                 schedule &&
-                !googleLogin &&
                 < NewEventModal
                     onClose={() => { setSchedule(null); }}
-                    onSave={(name, description, range) => {
+                    onSave={async(we_title, we_desc, we_subject, we_start, we_end) => {
                         try {
-                            const body = {
-                                'event': {
-                                    'summary': name,
-                                    'description': description,
-                                    'start': {
-                                        'dateTime': range[0].toISOString(),
-                                        'timeZone': 'Asia/Kuala_Lumpur',
-                                    },
-                                    'end': {
-                                        'dateTime': range[1].toISOString(),
-                                        'timeZone': 'Asia/Kuala_Lumpur',
-                                    },
-                                    "reminders": {
-                                        "useDefault": true
-                                    }
-                                }
-                            };
-                            setEvent(body);
-
+                            const body = { we_title, we_desc, we_subject, we_start, we_end };
+                            const response = fetch(`/api/notionLog`, {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                                body: JSON.stringify(body)
+                            });
+                            const status = await response?.status;
+                            if (status === 200) {
+                                toast.success("Event successfully added!")
+                                refetchCal();
+                            }
                             setSchedule(null);
                         } catch (err) {
                             console.log(err.message);
                         }
                     }}
-                    title={schedule}
+
+                    schedule={schedule}
                 />
             }
-            {
+            {/* {
                 schedule &&
                 googleLogin &&
                 <GoogleAuth />
-            }
+            } */}
             {
                 confirm &&
                 <ConfirmationModal
