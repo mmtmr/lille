@@ -181,7 +181,6 @@ async function insertCE(ce) {
         const checkReplacement=await pool.query(
             "SELECT * FROM CLASS_EVENT_T WHERE ce_type=$1 AND cou_code=$2 AND ce_week=$3 AND ce_replacement=true;",
             [ce.type, ce.cou_code, ce.week]);
-        console.log(checkReplacement.rows);
         if (checkReplacement.rows.length>0) return;
         await pool.query(
             "INSERT INTO CLASS_EVENT_T (ce_type,ce_start,ce_end,ce_location,ce_week,cou_code) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT (ce_type,cou_code,ce_week) DO UPDATE SET ce_type=EXCLUDED.ce_type, ce_start=EXCLUDED.ce_start, ce_end=EXCLUDED.ce_end, ce_location=EXCLUDED.ce_location, ce_week=EXCLUDED.ce_week, cou_code=EXCLUDED.cou_code;",
