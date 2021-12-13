@@ -86,6 +86,7 @@ export const NewEventModal = ({ onSave, onClose, schedule }) => {
                 <Modal.Footer>
                     {
                         subject &&
+                        !schedule.new&&
                         <Button
                             variant="danger"
                             onClick={() => { setDel(schedule) }}
@@ -104,6 +105,7 @@ export const NewEventModal = ({ onSave, onClose, schedule }) => {
                                     body: JSON.stringify(body)
                                 });
                                 setDel(null);
+                                onClose();
                             }}
                             targetName={schedule.title}
                         />

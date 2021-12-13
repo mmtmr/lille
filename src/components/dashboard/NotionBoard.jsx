@@ -104,7 +104,7 @@ export const NotionBoard = ({ refetchCal }) => {
         return (
             <>
                 <Button variant="success" onClick={() => { setConfirm([title, cell]) }}><FontAwesomeIcon icon={faCheck} /></Button>
-                <Button variant="info" onClick={() => { setSchedule({ title: title, subject: subject, desc: "", start: new Date(), end: new Date() }) }}><FontAwesomeIcon icon={faClock} /></Button>
+                <Button variant="info" onClick={() => { setSchedule({ title: title, subject: subject, desc: "", start: new Date(), end: new Date(), new: true }) }}><FontAwesomeIcon icon={faClock} /></Button>
             </>
         )
     }
@@ -166,7 +166,7 @@ export const NotionBoard = ({ refetchCal }) => {
                     onSave={async(we_title, we_desc, we_subject, we_start, we_end) => {
                         try {
                             const body = { we_title, we_desc, we_subject, we_start, we_end };
-                            const response = fetch(`/api/notionLog`, {
+                            const response = await fetch(`/api/notionLog`, {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
                                 body: JSON.stringify(body)
