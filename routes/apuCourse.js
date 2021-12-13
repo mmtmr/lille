@@ -178,10 +178,14 @@ router.get('/', (req, res) => {
 );
 async function insertCE(ce) {
     try {
+        const checkReplacement=await pool.query(
+            "SELECT * FROM CLASS_EVENT_T WHERE ce_type=$1 AND cou_code=$2 AND ce_week=$3 AND ce_replacement=true;",
+            [ce.type, ce.cou_code, ce.week]);
+        console.log(checkReplacement.rows);
+        if (checkReplacement.rows.length>0) return;
         await pool.query(
-            "INSERT INTO CLASS_EVENT_T (ce_type,ce_start,ce_end,ce_location,ce_week,cou_code) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT (ce_type,cou_code,ce_week) WHERE NOT ce_replacement DO UPDATE SET ce_type=EXCLUDED.ce_type, ce_start=EXCLUDED.ce_start, ce_end=EXCLUDED.ce_end, ce_location=EXCLUDED.ce_location, ce_week=EXCLUDED.ce_week, cou_code=EXCLUDED.cou_code;",
+            "INSERT INTO CLASS_EVENT_T (ce_type,ce_start,ce_end,ce_location,ce_week,cou_code) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT (ce_type,cou_code,ce_week) DO UPDATE SET ce_type=EXCLUDED.ce_type, ce_start=EXCLUDED.ce_start, ce_end=EXCLUDED.ce_end, ce_location=EXCLUDED.ce_location, ce_week=EXCLUDED.ce_week, cou_code=EXCLUDED.cou_code;",
             [ce.type, ce.start, ce.end, ce.location, ce.week, ce.cou_code]);
-
         //console.log(`Success ${ce.cou_code} ${ce.type} ${ce.week}`);
     } catch (err) {
         console.error(err.message + ' on insert ' + ce.cou_code + ce.type + ce.start + ce.end + ce.week);
@@ -210,9 +214,11 @@ router.put('/:ce_id', authorize, async (req, res) => {
     try {
         const { ce_id } = req.params;
         const { ce_start, ce_end, ce_desc, ce_location } = req.body;
+        console.log(req.body);
         const updateClassEvent = await pool.query(
-            "UPDATE CLASS_EVENT_T SET ce_start=$1,ce_end=$2,ce_desc=$3,ce_location=$4, ce_replacement=$5 WHERE ce_id=$6;", [ce_start, ce_end, ce_desc, ce_location, "f", ce_id]
+            "UPDATE CLASS_EVENT_T SET ce_start=$1,ce_end=$2,ce_desc=$3,ce_location=$4, ce_replacement=$5 WHERE ce_id=$6;", [ce_start, ce_end, ce_desc, ce_location, "t", ce_id]
             );
+        console.log(updateClassEvent);
         res.sendStatus(200);
         } catch (err) {
         console.log(err.message);

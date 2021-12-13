@@ -118,7 +118,7 @@ export const NewEventModal = ({ onSave, onClose, schedule }) => {
                             }else if(location && range){
                                 if (!description) { setDescription(""); }
                                 setError(false);
-                                onSave(range[0], range[1], description, location);
+                                onSave(new Date(range[0].getTime() - new Date().getTimezoneOffset() * 60000), new Date(range[1].getTime() - new Date().getTimezoneOffset() * 60000), description, location);
                             } else {
                                 setError(true);
                             }

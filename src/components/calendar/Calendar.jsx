@@ -173,7 +173,6 @@ export const Calendar = () => {
                     onSave={async (ce_start, ce_end, ce_desc, ce_location) => {
                         try {
                             const body = { ce_start, ce_end, ce_desc, ce_location };
-                            console.log(event);
                             const response = fetch(`/api/apuCourse/${event.id}`, {
                                 method: "PUT",
                                 headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
