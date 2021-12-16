@@ -225,4 +225,19 @@ router.put('/:ce_id', authorize, async (req, res) => {
     }
 });
 
+//Create a course event
+router.post('/', async (req, res) => {
+    try {
+        const { ce } = req.body;
+        console.log(req.body);
+        const updateClassEvent = await pool.query(
+            "INSERT INTO CLASS_EVENT_T (ce_type,ce_start,ce_end,ce_location,ce_week,cou_code) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT (ce_type,cou_code,ce_week) DO UPDATE SET ce_type=EXCLUDED.ce_type, ce_start=EXCLUDED.ce_start, ce_end=EXCLUDED.ce_end, ce_location=EXCLUDED.ce_location, ce_week=EXCLUDED.ce_week, cou_code=EXCLUDED.cou_code;",
+            [ce.type, ce.start, ce.end, ce.location, ce.week, ce.cou_code]);
+        await updateCETitle();
+        res.sendStatus(200);
+        } catch (err) {
+        console.log(err.message);
+        res.sendStatus(500);
+    }
+});
 module.exports = router;
