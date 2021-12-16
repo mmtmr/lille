@@ -82,8 +82,14 @@ export const Dashboard = () => {
               //{ googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink', id: 'notion' },
               { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
               { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
-              { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
+              //{ googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
               //{ googleCalendarId: '13h4uict96okp7hnmnq0m28fisn8k15c@import.calendar.google.com', color: 'violet', textColor: 'blue' }, //moodle assignment submission deadline
+              {
+                url:'https://stormy-bastion-22629.herokuapp.com/https://outlook.live.com/owa/calendar/f2e5756d-59ee-4c79-b36f-b2c5bf186115/f187ce75-ea44-4841-834b-9d7c21ee588b/cid-3B7E356350CB85DB/calendar.ics',
+                format:'ics',
+                color: 'pink',
+                textColor: 'deeppink'
+            },//Microsoft
               {
                 url: '/api/apuCourse',
                 method: 'GET',
@@ -132,7 +138,7 @@ export const Dashboard = () => {
                 //{ googleCalendarId: 'lily.meisim@gmail.com', color: 'red', textColor: 'pink', id: 'notion' },
                 { googleCalendarId: 'en.malaysia#holiday@group.v.calendar.google.com' },//Malaysia Holiday
                 { googleCalendarId: 'p520al5mfgqq5m2a8pu021nv0c@group.calendar.google.com', color: '#00B2A9', textColor: 'white', backgroundColor: '#00B2A9' }, //Liverpool
-                { googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
+                //{ googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
                 //{ googleCalendarId: '13h4uict96okp7hnmnq0m28fisn8k15c@import.calendar.google.com', color: 'violet', textColor: 'blue' }, //moodle assignment submission deadline
                 {
                   url: '/api/apuCourse',
@@ -145,6 +151,12 @@ export const Dashboard = () => {
                     headers: [{ jwt_token: localStorage.token, rt_token: localStorage.refreshToken }]
                   }
                 },
+                {
+                  url:'https://stormy-bastion-22629.herokuapp.com/https://outlook.live.com/owa/calendar/f2e5756d-59ee-4c79-b36f-b2c5bf186115/f187ce75-ea44-4841-834b-9d7c21ee588b/cid-3B7E356350CB85DB/calendar.ics',
+                  format:'ics',
+                  color: 'pink',
+                  textColor: 'deeppink'
+              },//Microsoft
                 {
                   url: '/api/notionLog',
                   method: 'GET',
