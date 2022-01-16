@@ -6,9 +6,10 @@ const authorize = require("../middleware/authorize");
 //Create a work event
 router.post('/', authorize, async (req, res) => {
     try {
-        const {we_title, we_start, we_end, we_desc, we_subject} = req.body;
+        const user_id = req.header("user_id");
+        const { we_title, we_start, we_end, we_desc, we_subject } = req.body;
         const newWorkEvent = await pool.query(
-            "INSERT INTO work_event_t (we_title,we_start,we_end,we_desc,we_subject) VALUES ($1,$2,$3,$4,$5)", [we_title, we_start, we_end, we_desc, we_subject]
+            "INSERT INTO work_event_t (we_title,we_start,we_end,we_desc,we_subject,user_id) VALUES ($1,$2,$3,$4,$5,$6)", [we_title, we_start, we_end, we_desc, we_subject, user_id]
         );
         res.sendStatus(200);
     } catch (err) {
@@ -20,9 +21,11 @@ router.post('/', authorize, async (req, res) => {
 //Get all work events
 router.get('/', async (req, res) => {
     try {
+        const user_id = req.query.user_id;
         const allWorkEvent = await pool.query(
-            "SELECT we_id AS id, we_start AS start,we_end AS end,we_title AS title, we_desc AS description,we_subject AS subject FROM WORK_EVENT_T;"
-            );
+            "SELECT we_id AS id, we_start AS start,we_end AS end,we_title AS title, we_desc AS description,we_subject AS subject FROM WORK_EVENT_T WHERE user_id=$1;",
+            [user_id]
+        );
         res.send(allWorkEvent.rows);
 
     } catch (err) {
@@ -36,7 +39,7 @@ router.get('/', async (req, res) => {
 router.put('/:we_id', authorize, async (req, res) => {
     try {
         const { we_id } = req.params;
-        const { we_title, we_start, we_end, we_desc, we_subject} = req.body;
+        const { we_title, we_start, we_end, we_desc, we_subject } = req.body;
         const updateWorkEvent = await pool.query("UPDATE work_event_t SET we_title=$1,we_start=$2,we_end=$3,we_desc=$4,we_subject=$5 WHERE we_id=$6;", [we_title, we_start, we_end, we_desc, we_subject, we_id]);
         res.sendStatus(200);
     } catch (err) {

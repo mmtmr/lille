@@ -8,9 +8,10 @@ const authorize = require("../middleware/authorize");
 router.post('/',authorize, async (req, res) => {
 
     try {
+        const user_id = req.header("user_id");
         const { tsk_name, tsk_est_min, tsk_todo } = req.body;
         const newTask = await pool.query(
-            "INSERT INTO task_t (tsk_name,tsk_est_min,tsk_todo) VALUES ($1,$2,$3)", [tsk_name, tsk_est_min, tsk_todo]
+            "INSERT INTO task_t (tsk_name,tsk_est_min,tsk_todo,user_id) VALUES ($1,$2,$3,$4)", [tsk_name, tsk_est_min, tsk_todo, user_id]
         );
     } catch (err) {
         console.error(err.message);
@@ -21,10 +22,11 @@ router.post('/',authorize, async (req, res) => {
 router.post('/:tsk_id', authorize, async (req, res) => {
 
     try {
+        const user_id = req.header("user_id");
         const { tsk_id } = req.params;
         const { st_name } = req.body;
         const newTask = await pool.query(
-            "INSERT INTO subtask_t (st_name,tsk_id) VALUES ($1,$2)", [st_name, tsk_id]
+            "INSERT INTO subtask_t (st_name,tsk_id) VALUES ($1,$2,$3)", [st_name, tsk_id, user_id]
         );
     } catch (err) {
         console.error(err.message);
@@ -35,11 +37,14 @@ router.post('/:tsk_id', authorize, async (req, res) => {
 //Get all tasks and subtasks with their occurance rate
 router.get('/', authorize, async (req, res) => {
     try {
+        const user_id = req.header("user_id");
         const allTasks = await pool.query(
-            "SELECT * FROM task_t;"
+            "SELECT * FROM task_t WHERE user_id=$1;",
+            [user_id]
         );
         const allSubtasks = await pool.query(
-            "SELECT * FROM subtask_t;"
+            "SELECT * FROM subtask_t WHERE user_id=$2;",
+            [user_id]
         );
 
         const allTasks_val = allTasks.rows;
@@ -94,10 +99,11 @@ router.get('/', authorize, async (req, res) => {
 //Get a task and its subtasks
 router.get('/:tsk_id', authorize,async (req, res) => {
     try {
+        const user_id = req.header("user_id");
         const { tsk_id } = req.params;
-        const task = await pool.query("SELECT * FROM task_t WHERE tsk_id = $1", [tsk_id]);
+        const task = await pool.query("SELECT * FROM task_t WHERE tsk_id = $1 AND user_id = $2", [tsk_id,user_id]);
         const subtasks = await pool.query(
-            "SELECT * FROM subtask_t WHERE tsk_id = $1;", [tsk_id]
+            "SELECT * FROM subtask_t WHERE tsk_id = $1 AND user_id = $2;", [tsk_id,user_id]
         );
         //res.json(task.rows[0]);
         var fulltask = task.rows[0];

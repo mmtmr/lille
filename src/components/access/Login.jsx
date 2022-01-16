@@ -32,9 +32,9 @@ export const Login = ({ setAuth }) => {
       );
 
       const parseRes = await response.json();
-
       if (parseRes.jwtToken && parseRes.rtToken) {
         localStorage.setItem("token", parseRes.jwtToken);
+        localStorage.setItem("user_id",parseRes.user_id)
         if(remember_login){
           localStorage.setItem("refreshToken", parseRes.rtToken);
         }

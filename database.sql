@@ -2,13 +2,13 @@
 -- CREATE DATABASE lille;
 
 -- CREATE TABLE COURSE_T(
---     cou_code VARCHAR(5) NOT NULL,
+--     cou_code VARCHAR(10) NOT NULL,
 --     cou_name VARCHAR(50) NOT NULL,
---     cou_lecturer VARCHAR(50) NOT NULL,
+--     cou_lecturer VARCHAR(100) NOT NULL,
 --     cou_academic_year INT NOT NULL,
 --     cou_academic_semester INT NOT NULL,
---      intake_group_code VARCHAR(25) NOT NULL,
---     PRIMARY KEY (cou_code, intake_group_code)
+--      cou_school CHAR(5) NOT NULL,
+--     PRIMARY KEY (cou_code),
 -- );
 
 -- CREATE TABLE WORK_T(
@@ -17,7 +17,7 @@
 --     wrk_start TIMESTAMP NOT NULL,
 --     wrk_end TIMESTAMP NOT NULL,
 --     wrk_desc VARCHAR(200),
---     cou_code VARCHAR(5),
+--     cou_code VARCHAR(10),
 --     FOREIGN KEY (cou_code) REFERENCES COURSE_T(cou_code)
 -- );
 
@@ -33,6 +33,7 @@
 --     ce_week CHAR(10) NOT NULL,
 --     cou_code VARCHAR(5) NOT NULL,
 --     intake_group_code VARCHAR(25) NOT NULL,
+
 --     FOREIGN KEY (cou_code,intake_group_code) REFERENCES COURSE_T(cou_code,intake_group_code)
 --     CONSTRAINT UQ_CLASS_EVENT_T UNIQUE(ce_type, cou_code, ce_week)
 -- );
@@ -89,6 +90,9 @@ CREATE TABLE TASK_T(
     tsk_created TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     tsk_archive BOOLEAN DEFAULT FALSE,
     tsk_todo BOOLEAN DEFAULT FALSE
+    user_id UUID NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USER_T(user_id)
+
 );
 
 CREATE TABLE SUBTASK_T(
@@ -96,6 +100,8 @@ CREATE TABLE SUBTASK_T(
     st_name VARCHAR(100) NOT NULL,
     tsk_id INT NOT NULL,
     st_created TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    user_id UUID NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USER_T(user_id)
     FOREIGN KEY (tsk_id) REFERENCES TASK_T(tsk_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -106,6 +112,8 @@ CREATE TABLE TIME_LOG_T(
     tl_real_min INT NOT NULL,
     tl_created TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     tsk_id INT NOT NULL,
+     user_id UUID NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USER_T(user_id)
     FOREIGN KEY (tsk_id) REFERENCES TASK_T(tsk_id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
@@ -145,13 +153,49 @@ CREATE TABLE USER_T(
 -- INSERT INTO COURSE_T
 -- VALUES ('BIS','Business Intelligence Systems','MOHAMMAD NAMAZEE BIN MOHD NIZAM',2,2);
 
+
 CREATE TABLE WORK_EVENT_T(
     we_id SERIAL PRIMARY KEY,
     we_title VARCHAR(100) NULL,
     we_start TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     we_end TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
     we_desc VARCHAR(200),
-    we_subject VARCHAR(20) NOT NULL
+    we_subject VARCHAR(20) NOT NULL,
+    user_id uuid NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USER_T(user_id)
 );
 
+-- Example of adding UUID to table
+-- ALTER TABLE TIME_LOG_T
+-- ADD COLUMN user_id uuid;
+
+-- UPDATE TIME_LOG_T
+-- SET user_id='{XXXX}';
+
+-- ALTER TABLE TIME_LOG_T
+-- ALTER COLUMN user_id SET NOT NULL;
+
+-- ALTER TABLE TIME_LOG_T
+-- ADD FOREIGN KEY (user_id) REFERENCES USER_T(user_id);
+
 --\copy WORK_EVENT_T(we_subject, we_title, we_start, we_end, we_desc) FROM 'D:\Users\NAME\Downloads\tmp-163932391256768.csv' DELIMITER ',' CSV HEADER;
+
+CREATE TABLE OPTION_T(
+    opt_notion_database_id VARCHAR(100) NULL,
+    opt_dashboard_image_url VARCHAR(1000) NULL,
+    opt_colour_scheme VARCHAR(100) NULL,
+    opt_school VARCHAR(10) NULL,
+    opt_habit BOOLEAN NOT NULL DEFAULT 'f',
+    opt_revision BOOLEAN NOT NULL DEFAULT 'f',
+    user_id uuid NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USER_T(user_id)
+);
+
+-- ALTER TABLE COURSE_T
+-- ADD COLUMN cou_school CHAR(3);
+
+-- UPDATE COURSE_T
+-- SET cou_school='APU';
+
+-- ALTER TABLE COURSE_T
+-- ALTER COLUMN cou_school SET NOT NULL;

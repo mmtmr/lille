@@ -14,7 +14,7 @@ export const WelcomeBar = () => {
                 <Container>
                     <Navbar.Brand href="#">Lille</Navbar.Brand>
                     <Form className="d-flex">
-                    {/* <Link to="/register">Sign Up</Link>&nbsp;&nbsp;&nbsp;&nbsp; */}
+                    <Link to="/register">Sign Up</Link>&nbsp;&nbsp;&nbsp;&nbsp;
                     <Link to="/login">Log In</Link>
                     </Form>
                 </Container>

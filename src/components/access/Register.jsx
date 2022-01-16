@@ -34,6 +34,8 @@ export const Register = ({ setAuth }) => {
 
       if (parseRes.jwtToken) {
         localStorage.setItem("token", parseRes.jwtToken);
+        localStorage.setItem("userId",parseRes.user_id)
+
         setAuth(true);
         toast.success("Register Successfully");
       } else {

@@ -1,59 +1,72 @@
 const router = require("express").Router();
 const authorize = require("../middleware/authorize");
 const notion = require("../notion");
+const pool = require("../db");
 require("dotenv").config();
 
-const databaseId = process.env.NOTION_DATABASE_ID
+// const databaseId = process.env.NOTION_DATABASE_ID
 
 //Query database
-router.get('/notion', authorize,async(req,res)=>{
+router.get('/notion', authorize, async (req, res) => {
   try {
+    const user_id = req.header("user_id");
+    const findDatabaseID = await pool.query(
+      "SELECT opt_notion_database_id FROM OPTION_T WHERE user_id=$1;",
+      [user_id]
+    );
+
+    const { opt_notion_database_id } = await findDatabaseID.rows[0];
+
     const response = await notion.databases.query({
-        database_id: databaseId,
-        filter: {
-          and: [
-            {
-              property: 'Status',
-              select: {
-                is_not_empty: true,
-              },
-            },
-            {
-              property: 'Status',
-              select: {
-                does_not_equal: 'Completed',
-              },
-            },
-          ],
-        },
-        sorts: [
+      database_id: opt_notion_database_id,
+      filter: {
+        and: [
           {
-            property: 'Priority',
-            direction: 'descending',
+            property: 'Status',
+            select: {
+              is_not_empty: true,
+            },
           },
           {
             property: 'Status',
-            direction: 'descending',
+            select: {
+              does_not_equal: 'Completed',
+            },
           },
         ],
-      });
-      res.json(response.results);
+      },
+      sorts: [
+        {
+          property: 'Priority',
+          direction: 'descending',
+        },
+        {
+          property: 'Status',
+          direction: 'descending',
+        },
+      ],
+    });
+    res.json(response.results);
   } catch (error) {
-    console.error(error.body);
+    console.error(error.message);
     res.sendStatus(500);
-
   }
 })
 
 //Query database
-router.put('/notion', authorize,async(req,res)=>{
+router.put('/notion', authorize, async (req, res) => {
   try {
-    const {id}=req.body;
+    // const user_id = req.header("user_id");
+    // const databaseId = await pool.query(
+    //   "SELECT opt_notion_database_id FROM OPTION_T WHERE user_id=$1;",
+    //   [user_id]
+    // );
+    const { id } = req.body;
     const response = await notion.pages.update({
       page_id: id,
       properties: {
         'Status': {
-          select:{
+          select: {
             "name": "Completed"
           }
         },
@@ -61,7 +74,7 @@ router.put('/notion', authorize,async(req,res)=>{
     });
     res.sendStatus(200);
   } catch (error) {
-    console.error(error.body);
+    console.error(error.message);
     res.sendStatus(500);
 
   }

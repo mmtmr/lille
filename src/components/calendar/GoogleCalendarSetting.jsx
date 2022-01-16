@@ -19,6 +19,7 @@ const OptionTheme = (theme) => ({
         primary: '#32fbe2',
     },
 })
+//TODO Colour option
 
 export const GoogleCalendarSetting = ({ googleCalendarSetting, onSave, onClose }) => {
     const [apiKey, setApiKey] = useState(googleCalendarSetting?googleCalendarSetting.apiKey:null);

@@ -22,7 +22,7 @@ export const CalendarSetting = () => {
     useEffect(() => {
         const getTimeLog = async () => {
             try {
-                const response = await axios.get(`/api/timelog`,{headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }});
+                const response = await axios.get(`/api/timelog`,{headers: { "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken, "user_id":localStorage.user_id }});
                 const data = await response?.data;
                 setLog(data);
 
@@ -76,7 +76,7 @@ export const CalendarSetting = () => {
                             const body = { apiKey,ids };
                             const response = fetch("/api/googleCalendar", {
                                 method: "POST",
-                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken, "user_id":localStorage.user_id },
                                 body: JSON.stringify(body)
                             });
                             setCreateLog(false);

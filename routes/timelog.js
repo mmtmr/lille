@@ -6,9 +6,11 @@ const authorize = require("../middleware/authorize");
 //Create a timelog
 router.post('/', authorize, async (req, res) => {
     try {
+        const user_id = req.header("user_id");
         const { tl_date, tl_standby_min, tl_real_min, tsk_id, st_ids } = req.body;
         const newTimeLog = await pool.query(
-            "INSERT INTO time_log_t (tl_date,tl_standby_min,tl_real_min,tsk_id) VALUES ($1,$2,$3,$4) RETURNING tl_id", [tl_date, tl_standby_min, tl_real_min, tsk_id]
+            "INSERT INTO time_log_t (tl_date,tl_standby_min,tl_real_min,tsk_id,user_id) VALUES ($1,$2,$3,$4,$5) RETURNING tl_id",
+            [tl_date, tl_standby_min, tl_real_min, tsk_id,user_id]
         );
         const { tl_id } = newTimeLog.rows[0];
 
@@ -28,9 +30,10 @@ router.post('/', authorize, async (req, res) => {
 //Get all timelog and their subtask
 router.get('/', authorize, async (req, res) => {
     try {
+        const user_id = req.header("user_id");
         const tl_st = await pool.query("SELECT * FROM tl_st_relation_t;");
         const tl_st_ids = tl_st.rows.map(tl_st => Object.values(tl_st));
-        const timelog = await pool.query("SELECT * FROM time_log_t;");
+        const timelog = await pool.query("SELECT * FROM time_log_t WHERE user_id=$1;",[user_id]);
         var allTimelog = timelog.rows;
 
         allTimelog.map(tl => tl.subtask = []);

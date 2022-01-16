@@ -78,7 +78,7 @@ router.post('/event',
       }, function (err, event) {
         if (err) {
           console.log('There was an error contacting the Calendar service: ' + err);
-          console.log(event)
+          // console.log(event)
           res.sendStatus(401);
           return;
         }

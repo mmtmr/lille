@@ -20,7 +20,7 @@ export const NotionBoard = ({ refetchCal }) => {
     useEffect(() => {
         const getList = async () => {
             try {
-                const response = await axios.get(`/api/dashboard/notion`, { headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken } });
+                const response = await axios.get(`/api/dashboard/notion`, { headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken, user_id: localStorage.user_id } });
                 const data = await response?.data;
                 setList(data);
 
@@ -88,7 +88,7 @@ export const NotionBoard = ({ refetchCal }) => {
             const body = { id };
             const response = fetch("/api/dashboard/notion", {
                 method: "PUT",
-                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken, "user_id": localStorage.user_id },
                 body: JSON.stringify(body)
             });
             toast.success("Congratulations in completing task :D");
@@ -168,7 +168,7 @@ export const NotionBoard = ({ refetchCal }) => {
                             const body = { we_title, we_desc, we_subject, we_start, we_end };
                             const response = await fetch(`/api/notionLog`, {
                                 method: "POST",
-                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken, "user_id": localStorage.user_id },
                                 body: JSON.stringify(body)
                             });
                             const status = await response?.status;

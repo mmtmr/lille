@@ -10,12 +10,14 @@ import Col from 'react-bootstrap/Col'
 import CustomViewPlugin from './CustomView';
 import { NotionBoard } from './NotionBoard';
 import { NewEventModal } from './NewEventModal';
+import { useFetch } from '../../hooks/useFetch'
 
 export const Dashboard = () => {
 
   const [event, setEvent] = useState();
   const calBoardRef = useRef();
   const calCustomRef = useRef();
+
 
   const handleEventClick = (clickInfo) => {
     clickInfo.jsEvent.preventDefault();
@@ -25,10 +27,10 @@ export const Dashboard = () => {
         window.open(clickInfo.event.url);
       }
     } else if (clickInfo.event.extendedProps.lecturer) {
-      var schedule = { id:clickInfo.event._def.publicId, location: clickInfo.event.extendedProps.location, description: clickInfo.event.extendedProps.description, start: new Date(clickInfo.event._instance.range.start.getTime()+new Date().getTimezoneOffset()*60000), end:new Date(clickInfo.event._instance.range.end.getTime()+new Date().getTimezoneOffset()*60000) }
+      var schedule = { id: clickInfo.event._def.publicId, location: clickInfo.event.extendedProps.location, description: clickInfo.event.extendedProps.description, start: new Date(clickInfo.event._instance.range.start.getTime() + new Date().getTimezoneOffset() * 60000), end: new Date(clickInfo.event._instance.range.end.getTime() + new Date().getTimezoneOffset() * 60000) }
       setEvent(schedule);
     } else if (clickInfo.event.extendedProps.subject) {
-      var schedule = { id:clickInfo.event._def.publicId, title: clickInfo.event.title, subject: clickInfo.event.extendedProps.subject, description: clickInfo.event.extendedProps.description, start: new Date(clickInfo.event._instance.range.start.getTime()+new Date().getTimezoneOffset()*60000), end: new Date(clickInfo.event._instance.range.end.getTime()+new Date().getTimezoneOffset()*60000) }
+      var schedule = { id: clickInfo.event._def.publicId, title: clickInfo.event.title, subject: clickInfo.event.extendedProps.subject, description: clickInfo.event.extendedProps.description, start: new Date(clickInfo.event._instance.range.start.getTime() + new Date().getTimezoneOffset() * 60000), end: new Date(clickInfo.event._instance.range.end.getTime() + new Date().getTimezoneOffset() * 60000) }
       setEvent(schedule);
     }
 
@@ -60,12 +62,12 @@ export const Dashboard = () => {
 
   const removeTooltip = (info) => {
     try {
-        const tooltips=document.getElementsByClassName('tooltip');
-        while(tooltips.length > 0){
-            tooltips[0].parentNode.removeChild(tooltips[0]);
-        }
+      const tooltips = document.getElementsByClassName('tooltip');
+      while (tooltips.length > 0) {
+        tooltips[0].parentNode.removeChild(tooltips[0]);
+      }
     } catch (err) { console.log(err); }
-}
+  }
 
 
   return (
@@ -85,21 +87,21 @@ export const Dashboard = () => {
               //{ googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
               //{ googleCalendarId: '13h4uict96okp7hnmnq0m28fisn8k15c@import.calendar.google.com', color: 'violet', textColor: 'blue' }, //moodle assignment submission deadline
               {
-                url:'https://stormy-bastion-22629.herokuapp.com/https://outlook.live.com/owa/calendar/f2e5756d-59ee-4c79-b36f-b2c5bf186115/f187ce75-ea44-4841-834b-9d7c21ee588b/cid-3B7E356350CB85DB/calendar.ics',
-                format:'ics',
+                url: 'https://stormy-bastion-22629.herokuapp.com/https://outlook.live.com/owa/calendar/f2e5756d-59ee-4c79-b36f-b2c5bf186115/f187ce75-ea44-4841-834b-9d7c21ee588b/cid-3B7E356350CB85DB/calendar.ics',
+                format: 'ics',
                 color: 'pink',
                 textColor: 'deeppink'
-            },//Microsoft
+              },//Microsoft
               {
-                url: '/api/apuCourse',
+                url: '/api/timetable',
                 method: 'GET',
                 failure: function () {
                   alert('there was an error while fetching events!');
                 },
                 color: 'mediumseagreen',   // a non-ajax option
                 extraParams: {
-                  headers: [{ jwt_token: localStorage.token, rt_token: localStorage.refreshToken }]
-                },
+                  user_id: localStorage.user_id
+              },
               },
               {
                 url: '/api/notionLog',
@@ -109,8 +111,8 @@ export const Dashboard = () => {
                 },
                 color: 'red', textColor: 'pink', id: 'notion',
                 extraParams: {
-                  headers: [{ jwt_token: localStorage.token, rt_token: localStorage.refreshToken }]
-                },
+                  user_id: localStorage.user_id
+              },
               },
               {
                 url: 'https://stormy-bastion-22629.herokuapp.com/https://lms2.apiit.edu.my/calendar/export_execute.php?userid=40338&authtoken=493c4503582bbf37a4df8ae70d9c07bd27d8d99e&preset_what=all&preset_time=recentupcoming',
@@ -141,22 +143,22 @@ export const Dashboard = () => {
                 //{ googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
                 //{ googleCalendarId: '13h4uict96okp7hnmnq0m28fisn8k15c@import.calendar.google.com', color: 'violet', textColor: 'blue' }, //moodle assignment submission deadline
                 {
-                  url: '/api/apuCourse',
+                  url: '/api/timetable',
                   method: 'GET',
                   failure: function () {
                     alert('there was an error while fetching events!');
                   },
                   color: 'mediumseagreen',   // a non-ajax option
                   extraParams: {
-                    headers: [{ jwt_token: localStorage.token, rt_token: localStorage.refreshToken }]
-                  }
+                    user_id: localStorage.user_id
+                },
                 },
                 {
-                  url:'https://stormy-bastion-22629.herokuapp.com/https://outlook.live.com/owa/calendar/f2e5756d-59ee-4c79-b36f-b2c5bf186115/f187ce75-ea44-4841-834b-9d7c21ee588b/cid-3B7E356350CB85DB/calendar.ics',
-                  format:'ics',
+                  url: 'https://stormy-bastion-22629.herokuapp.com/https://outlook.live.com/owa/calendar/f2e5756d-59ee-4c79-b36f-b2c5bf186115/f187ce75-ea44-4841-834b-9d7c21ee588b/cid-3B7E356350CB85DB/calendar.ics',
+                  format: 'ics',
                   color: 'pink',
                   textColor: 'deeppink'
-              },//Microsoft
+                },//Microsoft
                 {
                   url: '/api/notionLog',
                   method: 'GET',
@@ -165,8 +167,8 @@ export const Dashboard = () => {
                   },
                   color: 'red', textColor: 'pink', id: 'notion',
                   extraParams: {
-                    headers: [{ jwt_token: localStorage.token, rt_token: localStorage.refreshToken }]
-                  },
+                    user_id: localStorage.user_id
+                },
                 },
                 {
                   url: 'https://stormy-bastion-22629.herokuapp.com/https://lms2.apiit.edu.my/calendar/export_execute.php?userid=40338&authtoken=493c4503582bbf37a4df8ae70d9c07bd27d8d99e&preset_what=all&preset_time=recentupcoming',
@@ -202,7 +204,7 @@ export const Dashboard = () => {
               const body = { we_title, we_desc, we_subject, we_start, we_end };
               const response = fetch(`/api/notionLog/${event.id}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken, "user_id": localStorage.user_id },
                 body: JSON.stringify(body)
               });
               const status = await response?.status;
@@ -227,7 +229,7 @@ export const Dashboard = () => {
               console.log(event);
               const response = fetch(`/api/apuCourse/${event.id}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken, "user_id": localStorage.user_id },
                 body: JSON.stringify(body)
               });
               const status = await response?.status;

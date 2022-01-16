@@ -51,7 +51,7 @@ export const AppRouter = () => {
 
             <Router>
                 <PublicRoute exact path="/login" component={Login} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
-                {/* <PublicRoute exact path="/register" component={Register} /> */}
+                <PublicRoute exact path="/register" component={Register} />
                 <ProtectedRoute exact path="/" component={Dashboard} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
                 <ProtectedRoute exact path="/calendar" component={Calendar} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>
                 <ProtectedRoute exact path="/chart" component={ChartPanel} isAuthenticated={isAuthenticated} isLoading={isLoading} setAuth={setAuth}/>

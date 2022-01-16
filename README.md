@@ -8,12 +8,15 @@ This a personal task management system that is customized to suit the developer'
 - [x]Review on time log chart
 - [x]Login system (For one person, not planning for multiple users)
 - [ ]Theme for calendar
-- [ ]Dashboard
+- [x]Dashboard
 - [ ]Visitors
 - [x]Notion.API implementation
 - [x]Spaced repetition
 - [ ]Server to host Anki
 - [ ]Separate calendar (with json config) and the pure calendar into two projects
 - [ ]Excel presentation of time log
+- [ ]Chat between different user
+- [ ]Turn class event into todos
+- [-]Multiple user
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

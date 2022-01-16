@@ -14,17 +14,10 @@ import { NewEventModal } from '../dashboard/NewEventModal';
 
 export const Calendar = () => {
     const [event, setEvent] = useState();
-    const [weekendVisible, setWeekendVisible] = useState(true);
-    const [currentEvents, setCurrentEvents] = useState([]);
-
-
-    // useEffect(() => {
-    //     useTimetable();
-    // }, [])
-
+   
     const handleEventClick = (clickInfo) => {
         clickInfo.jsEvent.preventDefault();
-        console.log(clickInfo.event);
+        // console.log(clickInfo.event);
         if (clickInfo.event.url) {
             if (confirm(`Are you sure you want to open new tab for the event '${clickInfo.event.title}'?`)) {
                 window.open(clickInfo.event.url);
@@ -61,14 +54,14 @@ export const Calendar = () => {
 
     const removeTooltip = (info) => {
         try {
-            const tooltips=document.getElementsByClassName('tooltip');
-            while(tooltips.length > 0){
+            const tooltips = document.getElementsByClassName('tooltip');
+            while (tooltips.length > 0) {
                 tooltips[0].parentNode.removeChild(tooltips[0]);
             }
         } catch (err) { console.log(err); }
     }
 
-
+    //TODO customized calendar
     return (
         <>
             <FullCalendar
@@ -109,21 +102,23 @@ export const Calendar = () => {
                     //{ googleCalendarId: '4gekf3tjbnuji36gm85a9sicrbt56jv9@import.calendar.google.com', color: 'pink', textColor: 'deeppink' }, //Outlook calendar, probably ms.l, originally ics but cannot import so convert to google calendar
                     //{ googleCalendarId: '13h4uict96okp7hnmnq0m28fisn8k15c@import.calendar.google.com', color: 'violet', textColor: 'blue' }, //moodle assignment submission deadline
                     {
-                        url:'https://stormy-bastion-22629.herokuapp.com/https://outlook.live.com/owa/calendar/f2e5756d-59ee-4c79-b36f-b2c5bf186115/f187ce75-ea44-4841-834b-9d7c21ee588b/cid-3B7E356350CB85DB/calendar.ics',
-                        format:'ics',
+                        url: 'https://stormy-bastion-22629.herokuapp.com/https://outlook.live.com/owa/calendar/f2e5756d-59ee-4c79-b36f-b2c5bf186115/f187ce75-ea44-4841-834b-9d7c21ee588b/cid-3B7E356350CB85DB/calendar.ics',
+                        format: 'ics',
                         color: 'pink',
                         textColor: 'deeppink'
                     },//Microsoft
                     {
-                        url: '/api/apuCourse',
+                        url: 'api/timetable',
                         method: 'GET',
                         beforeSend: function (xhr) {
-                            var headers = [{ "Content-Type": "application/json" }, { "jwt_token": localStorage.token }, { "rt_token": localStorage.refreshToken }];
+                            var headers = [{ "Content-Type": "application/json" }, { "jwt_token": localStorage.token }, { "rt_token": localStorage.refreshToken }, { "user_id": localStorage.user_id }];
                             for (var i in headers) xhr.setRequestHeader(i, headers[i]);
                         },
-                        headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                        extraParams: {
+                            user_id: localStorage.user_id
+                        },
                         failure: function () {
-                            alert('there was an error while fetching events!');
+                            alert('there was an error while fetching events!'); 
                         },
                         color: 'mediumseagreen',   // a non-ajax option
                     },
@@ -131,11 +126,11 @@ export const Calendar = () => {
                         url: '/api/notionLog',
                         method: 'GET',
                         failure: function () {
-                            alert('there was an error while fetching events!');
+                           alert('there was an error while fetching events!');
                         },
                         color: 'red', textColor: 'pink', id: 'notion',
                         extraParams: {
-                            headers: [{ jwt_token: localStorage.token, rt_token: localStorage.refreshToken }]
+                            user_id: localStorage.user_id
                         },
                     },
                     {
@@ -157,7 +152,7 @@ export const Calendar = () => {
                             const body = { we_title, we_desc, we_subject, we_start, we_end };
                             const response = fetch(`/api/notionLog/${event.id}`, {
                                 method: "PUT",
-                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken, "user_id": localStorage.user_id },
                                 body: JSON.stringify(body)
                             });
                             const status = await response?.status;
@@ -179,9 +174,9 @@ export const Calendar = () => {
                     onSave={async (ce_start, ce_end, ce_desc, ce_location) => {
                         try {
                             const body = { ce_start, ce_end, ce_desc, ce_location };
-                            const response = fetch(`/api/apuCourse/${event.id}`, {
+                            const response = fetch(`/api/timetable/${event.id}`, {
                                 method: "PUT",
-                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                                headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken, "user_id": localStorage.user_id },
                                 body: JSON.stringify(body)
                             });
                             const status = await response?.status;

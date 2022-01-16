@@ -18,6 +18,7 @@ router.post("/register", validInfo, async (req, res) => {
       user_email
     ]);
 
+
     if (user.rows.length > 0) {
       return res.status(401).json("User already exist!");
     }
@@ -30,10 +31,18 @@ router.post("/register", validInfo, async (req, res) => {
       [user_name, user_email, bcryptPassword]
     );
 
-    const jwtToken = jwtGenerator(newUser.rows[0].user_id);
-    const rtToken = rtGenerator(newUser.rows[0].user_id);
+    const user_id=newUser.rows[0].user_id;
 
-    return res.status(200).json({ jwtToken, rtToken });
+    let newOption = await pool.query(
+      "INSERT INTO OPTION_T (user_id) VALUES ($1)",
+      [user_id]
+    );
+    //INSERT INTO OPTION_T (user_id) VALUES ($1);
+
+    const jwtToken = jwtGenerator(user_id);
+    const rtToken = rtGenerator(user_id);
+
+    return res.status(200).json({ jwtToken, rtToken, user_id });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
@@ -61,9 +70,10 @@ router.post("/login", validInfo, async (req, res) => {
     if (!validPassword) {
       return res.status(401).json("Invalid Credential");
     }
-    const jwtToken = jwtGenerator(user.rows[0].user_id);
-    const rtToken = rtGenerator(user.rows[0].user_id);
-    return res.status(200).json({ jwtToken, rtToken });
+    const user_id=user.rows[0].user_id;
+    const jwtToken = jwtGenerator(user_id);
+    const rtToken = rtGenerator(user_id);
+    return res.status(200).json({ jwtToken, rtToken, user_id });
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
