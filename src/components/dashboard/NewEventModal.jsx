@@ -8,7 +8,7 @@ import { DeleteConfirmationModal } from '../common/DeleteConfirmationModal';
 
 export const NewEventModal = ({ onSave, onClose, schedule }) => {
     const [name, setName] = useState(schedule.title);
-    const [subject, setSubject] = useState(schedule.subject?schedule.subject:"");
+    const [subject, setSubject] = useState(schedule.subject);
     const [location, setLocation] = useState(schedule.location);
     const [description, setDescription] = useState(schedule.description);
     const [del, setDel] = useState();
@@ -41,7 +41,7 @@ export const NewEventModal = ({ onSave, onClose, schedule }) => {
 
                             }
                             {
-                                subject &&
+                                (subject || subject=="") &&
                                 <InputGroup>
                                     <InputGroup.Text>Subject</InputGroup.Text>
                                     <Form.Control
@@ -85,7 +85,7 @@ export const NewEventModal = ({ onSave, onClose, schedule }) => {
                 </Modal.Body>
                 <Modal.Footer>
                     {
-                        subject &&
+                        (subject || subject=="") &&
                         !schedule.new&&
                         <Button
                             variant="danger"
@@ -115,6 +115,7 @@ export const NewEventModal = ({ onSave, onClose, schedule }) => {
                         onClick={() => {
                             if (name && range) {
                                 if (!description) { setDescription(""); }
+                                if (!subject) { setSubject(""); }
                                 setError(false);
                                 onSave(name, description, subject, range[0], range[1]);
                             }else if(location && range){

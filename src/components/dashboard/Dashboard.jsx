@@ -29,9 +29,10 @@ export const Dashboard = () => {
     } else if (clickInfo.event.extendedProps.lecturer) {
       var schedule = { id: clickInfo.event._def.publicId, location: clickInfo.event.extendedProps.location, description: clickInfo.event.extendedProps.description, start: new Date(clickInfo.event._instance.range.start.getTime() + new Date().getTimezoneOffset() * 60000), end: new Date(clickInfo.event._instance.range.end.getTime() + new Date().getTimezoneOffset() * 60000) }
       setEvent(schedule);
-    } else if (clickInfo.event.extendedProps.subject) {
+    } else if (clickInfo.event.extendedProps.subject!=null) {
       var schedule = { id: clickInfo.event._def.publicId, title: clickInfo.event.title, subject: clickInfo.event.extendedProps.subject, description: clickInfo.event.extendedProps.description, start: new Date(clickInfo.event._instance.range.start.getTime() + new Date().getTimezoneOffset() * 60000), end: new Date(clickInfo.event._instance.range.end.getTime() + new Date().getTimezoneOffset() * 60000) }
       setEvent(schedule);
+
     }
 
   }
@@ -196,7 +197,7 @@ export const Dashboard = () => {
 
         </Row>
       </Container>
-      {event && event.subject &&
+      {event && (event.subject||event.subject=="") &&
         < NewEventModal
           onClose={() => { setEvent(null); }}
           onSave={async (we_title, we_desc, we_subject, we_start, we_end) => {
