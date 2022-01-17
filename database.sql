@@ -182,6 +182,7 @@ CREATE TABLE WORK_EVENT_T(
 
 CREATE TABLE OPTION_T(
     opt_notion_database_id VARCHAR(100) NULL,
+    opt_google_api_key VARCHAR(50) NULL,
     opt_dashboard_image_url VARCHAR(1000) NULL,
     opt_colour_scheme VARCHAR(100) NULL,
     opt_school VARCHAR(10) NULL,
@@ -199,3 +200,21 @@ CREATE TABLE OPTION_T(
 
 -- ALTER TABLE COURSE_T
 -- ALTER COLUMN cou_school SET NOT NULL;
+
+CREATE TABLE GOOGLE_CALENDAR_T(
+    gc_id VARCHAR(200) NOT NULL,
+    gc_color VARCHAR(20)
+    gc_textColor VARCHAR(20),
+    gc_backgroundColor VARCHAR(20),
+    user_id uuid NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USER_T(user_id)
+);
+
+CREATE TABLE ICALENDAR_T(
+    ic_url VARCHAR(200) NOT NULL,
+    ic_color VARCHAR(20)
+    ic_textColor VARCHAR(20),
+    ic_backgroundColor VARCHAR(20),
+    user_id uuid NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES USER_T(user_id)
+);

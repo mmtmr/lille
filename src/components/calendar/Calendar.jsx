@@ -11,10 +11,11 @@ import iCalendarPlugin from '@fullcalendar/icalendar'
 import "@fortawesome/fontawesome-free/css/all.css"
 import { Tooltip } from "bootstrap/dist/js/bootstrap.esm.min.js"
 import { NewEventModal } from '../dashboard/NewEventModal';
+import { useFetch } from '../../hooks/useFetch';
 
 export const Calendar = () => {
     const [event, setEvent] = useState();
-   
+    const googleCalendarApiKey = useFetch('/api/option/opt_google_api_key');
     const handleEventClick = (clickInfo) => {
         clickInfo.jsEvent.preventDefault();
         // console.log(clickInfo.event);
@@ -91,7 +92,7 @@ export const Calendar = () => {
                 //eventContent={renderEventContent}
                 weekNumbers={true}
                 weekNumberCalculation={calculateWeekNumber}
-                googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
+                googleCalendarApiKey={googleCalendarApiKey}
                 eventContent={renderEventContent}
                 eventDidMount={generateTooltip}
                 eventWillUnmount={removeTooltip}
@@ -108,7 +109,7 @@ export const Calendar = () => {
                         textColor: 'deeppink'
                     },//Microsoft
                     {
-                        url: 'api/timetable',
+                        url: '/api/timetable',
                         method: 'GET',
                         beforeSend: function (xhr) {
                             var headers = [{ "Content-Type": "application/json" }, { "jwt_token": localStorage.token }, { "rt_token": localStorage.refreshToken }, { "user_id": localStorage.user_id }];
@@ -118,7 +119,7 @@ export const Calendar = () => {
                             user_id: localStorage.user_id
                         },
                         failure: function () {
-                            alert('there was an error while fetching events!'); 
+                            alert('there was an error while fetching events!');
                         },
                         color: 'mediumseagreen',   // a non-ajax option
                     },
@@ -126,7 +127,7 @@ export const Calendar = () => {
                         url: '/api/notionLog',
                         method: 'GET',
                         failure: function () {
-                           alert('there was an error while fetching events!');
+                            alert('there was an error while fetching events!');
                         },
                         color: 'red', textColor: 'pink', id: 'notion',
                         extraParams: {
