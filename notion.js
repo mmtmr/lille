@@ -3,8 +3,6 @@ require("dotenv").config();
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY })
 
-const databaseId = process.env.NOTION_DATABASE_ID
-
 // async function getDatabase() {
 //   try {
 //     const response = await notion.databases.query({

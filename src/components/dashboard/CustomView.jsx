@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { sliceEvents, createPlugin } from '@fullcalendar/react';
-import bedroom from '../../../public/bedroom.jpg';
 import school_ring from '../../../public/school_ring.mp3';
 import { useAudio } from '../../hooks/useAudio';
 import { useFetch } from '../../hooks/useFetch'
