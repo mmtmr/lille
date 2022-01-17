@@ -64,7 +64,10 @@
     "react-toastify": "^8.0.3",
     "regenerator-runtime": "^0.13.7",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "webpack": "^5.56.0",
+    "webpack-cli": "^4.9.0",
+    "webpack-dev-server": "^4.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
@@ -79,9 +82,6 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
     "style-loader": "^3.3.0",
-    "url-loader": "^4.1.1",
-    "webpack": "^5.56.0",
-    "webpack-cli": "^4.9.0",
-    "webpack-dev-server": "^4.3.0"
+    "url-loader": "^4.1.1"  
   }
 }
