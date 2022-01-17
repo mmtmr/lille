@@ -68,7 +68,8 @@ module.exports = {
         //   }),
     ],
     output: {
-        filename: 'bundle.js',
+        filename: "js/[name].js",
+        chunkFilename: "js/[name].chunk.js",
         path: path.join(__dirname, 'dist'),
         publicPath: '/'
     },
@@ -96,5 +97,8 @@ module.exports = {
             chunks: 'all',
         },
     },
+    performance: {
+        hints: false
+    }
 
 }
