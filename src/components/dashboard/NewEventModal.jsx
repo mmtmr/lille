@@ -8,7 +8,7 @@ import { DeleteConfirmationModal } from '../common/DeleteConfirmationModal';
 
 export const NewEventModal = ({ onSave, onClose, schedule }) => {
     const [name, setName] = useState(schedule.title);
-    const [subject, setSubject] = useState(schedule.subject);
+    const [subject, setSubject] = useState(schedule.subject?schedule.subject:"");
     const [location, setLocation] = useState(schedule.location);
     const [description, setDescription] = useState(schedule.description);
     const [del, setDel] = useState();

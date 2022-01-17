@@ -227,7 +227,7 @@ export const Dashboard = () => {
             try {
               const body = { ce_start, ce_end, ce_desc, ce_location };
               console.log(event);
-              const response = fetch(`/api/apuCourse/${event.id}`, {
+              const response = fetch(`/api/timetable/${event.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken, "user_id": localStorage.user_id },
                 body: JSON.stringify(body)

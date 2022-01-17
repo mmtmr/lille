@@ -15,7 +15,7 @@ import { useFetch } from '../../hooks/useFetch';
 
 export const Calendar = () => {
     const [event, setEvent] = useState();
-    const googleCalendarApiKey = useFetch('/api/option/opt_google_api_key');
+    // const googleCalendarApiKey = useFetch('/api/option/opt_google_api_key');
     const handleEventClick = (clickInfo) => {
         clickInfo.jsEvent.preventDefault();
         // console.log(clickInfo.event);
@@ -92,7 +92,7 @@ export const Calendar = () => {
                 //eventContent={renderEventContent}
                 weekNumbers={true}
                 weekNumberCalculation={calculateWeekNumber}
-                googleCalendarApiKey={googleCalendarApiKey}
+                googleCalendarApiKey={'AIzaSyChhsubNQqDxtMQTFYNYTkaMvgnHI-Bgvo'}
                 eventContent={renderEventContent}
                 eventDidMount={generateTooltip}
                 eventWillUnmount={removeTooltip}
