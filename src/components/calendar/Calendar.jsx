@@ -15,6 +15,7 @@ import { useFetch } from '../../hooks/useFetch';
 
 export const Calendar = () => {
     const [event, setEvent] = useState();
+    // const [eventSources]
     const googleCalendarApiKey = useFetch('/api/option/opt_google_api_key');
     const handleEventClick = (clickInfo) => {
         clickInfo.jsEvent.preventDefault();
@@ -109,7 +110,7 @@ export const Calendar = () => {
                         textColor: 'deeppink'
                     },//Microsoft
                     {
-                        url: '/api/timetable',
+                        url: 'api/timetable',
                         method: 'GET',
                         beforeSend: function (xhr) {
                             var headers = [{ "Content-Type": "application/json" }, { "jwt_token": localStorage.token }, { "rt_token": localStorage.refreshToken }, { "user_id": localStorage.user_id }];
