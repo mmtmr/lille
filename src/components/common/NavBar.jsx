@@ -7,6 +7,7 @@ import Container from 'react-bootstrap/Container'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import { toast } from "react-toastify";
+import { useFetch } from '../../hooks/useFetch';
 
 toast.configure();
 export const NavBar = ({ setAuth }) => {
@@ -22,12 +23,13 @@ export const NavBar = ({ setAuth }) => {
             console.error(err.message);
         }
     };
+    const userName=useFetch('/api/option/user_name');
 
     return (
         <>
             <Navbar bg="dark" variant="dark">
                 <Container>
-                    <Navbar.Brand href="./">Lille</Navbar.Brand>
+                    <Navbar.Brand href="./">{userName}</Navbar.Brand>
                     <Nav className="me-auto">
                         <Nav.Link href="./calendar">Calendar</Nav.Link>
                         {//TODO Add options
