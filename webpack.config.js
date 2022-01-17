@@ -89,6 +89,12 @@ module.exports = {
     },
     stats: {
         errorDetails: true,
-      },
+    },
+    optimization: {
+        splitChunks: {
+            // include all types of chunks
+            chunks: 'all',
+        },
+    },
 
 }
