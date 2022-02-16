@@ -21,7 +21,7 @@ export const TimeLogList = () => {
     useEffect(() => {
         const getTimeLog = async () => {
             try {
-                const response = await axios.get(`/api/timelog`,{headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }});
+                const response = await axios.get(`/api/timelog`,{headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken, user_id: localStorage.user_id }});
                 const data = await response?.data;
                 setLog(data);
 

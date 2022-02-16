@@ -32,13 +32,13 @@ export const NavBar = ({ setAuth }) => {
                     <Navbar.Brand href="./">{userName}</Navbar.Brand>
                     <Nav className="me-auto">
                         <Nav.Link href="./calendar">Calendar</Nav.Link>
-                        {//TODO Add options
-                        /* <Nav.Link href="./revision">Revision</Nav.Link>
+
+                        <Nav.Link href="./revision">Revision</Nav.Link>
                         <NavDropdown title="Time Log">
                             <NavDropdown.Item href="./task">Task</NavDropdown.Item>
                             <NavDropdown.Item href="./timelog">Time Log</NavDropdown.Item>
                             <NavDropdown.Item href="./chart">Chart</NavDropdown.Item>
-                        </NavDropdown> */}
+                        </NavDropdown> 
                     </Nav>
                     <Form className="d-flex">
                         {/* <Nav.Link href="./Option">Option</Nav.Link> */}

@@ -35,7 +35,7 @@ router.post('/:tsk_id', authorize, async (req, res) => {
 });
 
 //Get all tasks and subtasks with their occurance rate
-router.get('/', authorize, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const user_id = req.header("user_id");
         const allTasks = await pool.query(
@@ -43,7 +43,7 @@ router.get('/', authorize, async (req, res) => {
             [user_id]
         );
         const allSubtasks = await pool.query(
-            "SELECT * FROM subtask_t WHERE user_id=$2;",
+            "SELECT * FROM subtask_t WHERE user_id=$1;",
             [user_id]
         );
 
@@ -97,7 +97,7 @@ router.get('/', authorize, async (req, res) => {
 
 
 //Get a task and its subtasks
-router.get('/:tsk_id', authorize,async (req, res) => {
+router.get('/:tsk_id',async (req, res) => {
     try {
         const user_id = req.header("user_id");
         const { tsk_id } = req.params;
@@ -115,7 +115,7 @@ router.get('/:tsk_id', authorize,async (req, res) => {
     }
 });
 //Get a subtask
-router.get('/:tsk_id/:st_id',authorize, async (req, res) => {
+router.get('/:tsk_id/:st_id', async (req, res) => {
     try {
         const { tsk_id, st_id } = req.params;
         const subtask = await pool.query(

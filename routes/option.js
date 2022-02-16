@@ -4,7 +4,7 @@ const pool = require("../db");
 const authorize = require("../middleware/authorize");
 
 //Get the option
-router.get("/:param", authorize, async (req, res) => {
+router.get("/:param", async (req, res) => {
     try {
         const { param } = req.params;
         const user_id = req.header("user_id");

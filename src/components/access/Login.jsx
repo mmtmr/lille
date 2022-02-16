@@ -18,6 +18,14 @@ export const Login = ({ setAuth }) => {
 
   const onSubmitForm = async e => {
     e.preventDefault();
+    if(user_email==="view@mail.com"&&user_password==="view"){
+      setAuth(true);
+      console.log("hi")
+      toast.success("Granted View Access");
+      localStorage.setItem("user_id","84d81b06-5f3b-4e6e-8320-61391fe59bbe");
+      localStorage.setItem("viewAccess","yes");
+      return;
+    }
     try {
       const body = { user_email, user_password };
       const response = await fetch(

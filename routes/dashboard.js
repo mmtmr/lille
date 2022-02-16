@@ -7,7 +7,7 @@ require("dotenv").config();
 // const databaseId = process.env.NOTION_DATABASE_ID
 
 //Query database
-router.get('/notion', authorize, async (req, res) => {
+router.get('/notion', async (req, res) => {
   try {
     const user_id = req.header("user_id");
     const findDatabaseID = await pool.query(

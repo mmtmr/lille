@@ -28,7 +28,7 @@ export const TaskList = () => {
     useEffect(() => {
         const getTimeLog = async () => {
             try {
-                const response = await axios.get(`/api/task`,{headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }});
+                const response = await axios.get(`/api/task`,{headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken, user_id: localStorage.user_id  }});
                 const data = await response?.data;
                 setTask(data);
 
@@ -237,7 +237,7 @@ export const TaskList = () => {
                         const body = { st_name };
                         const response = fetch(`/api/task/${tsk_id}/${st_id}`, {
                             method: "PUT",
-                            headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken },
+                            headers: { "Content-Type": "application/json", "jwt_token": localStorage.token, "rt_token": localStorage.refreshToken},
                             body: JSON.stringify(body)
                         });
                         setEditSubTask(null);

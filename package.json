@@ -4,10 +4,7 @@
   "proxy": "http://localhost:5000",
   "description": "Personal Management System",
   "main": "index.js",
-  "engines": {
-    "node": "16.5.0",
-    "npm": "7.19.1"
-  },
+
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
@@ -50,7 +47,7 @@
     "jsonwebtoken": "^8.5.1",
     "passport": "^0.5.0",
     "passport-google-oauth": "^2.0.0",
-    "pg": "^8.6.0",
+    "pg": "^8.7.1",
     "plotly.js": "^2.5.1",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.4",
@@ -64,7 +61,8 @@
     "react-toastify": "^8.0.3",
     "regenerator-runtime": "^0.13.7",
     "request": "^2.88.2",
-    "request-promise": "^4.2.6"
+    "request-promise": "^4.2.6",
+    "sass": "^1.49.0"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
@@ -75,10 +73,10 @@
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-react": "^7.14.5",
     "babel-loader": "^8.2.2",
-    "css-loader": "^6.3.0",
+    "css-loader": "^6.5.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.2",
-    "style-loader": "^3.3.0",
+    "style-loader": "^3.3.1",
     "url-loader": "^4.1.1",
     "webpack": "^5.56.0",
     "webpack-cli": "^4.9.0",

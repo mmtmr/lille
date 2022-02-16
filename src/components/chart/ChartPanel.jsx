@@ -95,7 +95,9 @@ export const ChartPanel = () => {
             <Container className="full-height">
                 <Row>
                     <Col xs={3}>
-                        <Tabs defaultActiveKey="bar" onSelect={handleSelect}>
+                    {
+                            task&&log&&
+                            <Tabs defaultActiveKey="bar" onSelect={handleSelect}>
                             <Tab eventKey="bar" title="Bar" >
                                 <BarChartForm
                                     task={task}
@@ -121,6 +123,8 @@ export const ChartPanel = () => {
                                     onSubmit={(selectedType, selectedTaskID, startDate, endDate) => setBoxPlot({ type: selectedType, tsk_ids: selectedTaskID, start: startDate, end: endDate })} />
                             </Tab>
                         </Tabs>
+                        }
+                        
                     </Col>
                     <Col xs={2} />
                     <Col>

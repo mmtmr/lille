@@ -28,14 +28,13 @@ router.post('/', authorize, async (req, res) => {
 });
 
 //Get all timelog and their subtask
-router.get('/', authorize, async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const user_id = req.header("user_id");
         const tl_st = await pool.query("SELECT * FROM tl_st_relation_t;");
         const tl_st_ids = tl_st.rows.map(tl_st => Object.values(tl_st));
         const timelog = await pool.query("SELECT * FROM time_log_t WHERE user_id=$1;",[user_id]);
         var allTimelog = timelog.rows;
-
         allTimelog.map(tl => tl.subtask = []);
         allTimelog.map(tl => tl.st_ids = []);
 
@@ -66,7 +65,8 @@ router.get('/', authorize, async (req, res) => {
             }
 
 
-        } res.json(allTimelog);
+        }
+        res.send(allTimelog);
 
     } catch (err) {
         console.log(err.message);
@@ -75,7 +75,7 @@ router.get('/', authorize, async (req, res) => {
 });
 
 //Get a timelog and its task and subtask
-router.get('/:tl_id', authorize, async (req, res) => {
+router.get('/:tl_id', async (req, res) => {
     try {
         const { tl_id } = req.params;
         const timelog = await pool.query("SELECT * FROM time_log_t WHERE tl_id = $1;", [tl_id]);

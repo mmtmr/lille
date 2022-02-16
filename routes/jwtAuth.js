@@ -12,7 +12,7 @@ const authorize = require("../middleware/authorize");
 router.post("/register", validInfo, async (req, res) => {
 // router.post("/register", async (req, res) => {
   const { user_email, user_name, user_password } = req.body;
-
+  
   try {
     const user = await pool.query("SELECT * FROM USER_T WHERE user_email = $1", [
       user_email
@@ -52,7 +52,8 @@ router.post("/register", validInfo, async (req, res) => {
 router.post("/login", validInfo, async (req, res) => {
 // router.post("/login", async (req, res) => {
   const { user_email, user_password } = req.body;
-
+ 
+  
   try {
     const user = await pool.query("SELECT * FROM USER_T WHERE user_email = $1", [
       user_email

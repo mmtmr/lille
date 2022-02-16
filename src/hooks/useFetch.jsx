@@ -10,6 +10,7 @@ export const useFetch = (url) => {
                 const response = await axios.get(url,{headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken, user_id: localStorage.user_id }});
                 const data = await response?.data;
                 setTask(data);
+                console.log(response);
             } catch (err) {
                 console.log(err.message);
             }

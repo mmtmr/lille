@@ -19,12 +19,16 @@ export const AppRouter = () => {
 
     const checkAuthenticated = async () => {
         try {
-            const res = await fetch("/auth/jwt/verify", {
-                method: "POST",
-                headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }
-            });
-            const success = res.ok;
-            return success;
+            console.log(localStorage.getItem("viewAccess"));
+            if(localStorage.getItem("viewAccess")!=="yes"){
+                const res = await fetch("/auth/jwt/verify", {
+                    method: "POST",
+                    headers: { jwt_token: localStorage.token, rt_token: localStorage.refreshToken }
+                });
+                const success = res.ok;
+                return success;
+            }
+           return true;
         } catch (err) {
             console.error(err.message);
         }
